@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sky-bright: #007AFF;
+  --color-navy-dark: #0A2A43;
+  --color-orange-fire: #FF6200;
+  --color-blue-deep: #0002E9;
+  --color-purple-dark: #2C0055;
+  --color-gold: #F4A800;
+}
+
+/* Scroll suave global */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background-color: #FFFFFF;
+  color: #374151;
+  overflow-x: hidden;
+}
+
+/* Scrollbar personalizado — tema claro */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F9FA;
+}
+::-webkit-scrollbar-thumb {
+  background: #FF6200;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0002E9;
+}
+
+/* Animaciones globales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 98, 0, 0.25); }
+  50% { box-shadow: 0 0 30px rgba(255, 98, 0, 0.5); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Gradiente de texto — acento naranja/dorado */
+.gradient-text {
+  background: linear-gradient(135deg, #F4A800, #FF6200);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue {
+  background: linear-gradient(135deg, #007AFF, #0002E9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section heading underline */
+.section-underline::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  background: linear-gradient(90deg, #FF6200, #F4A800);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+/* Card base — tema claro */
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Hover card lift — sombra adaptada a fondos claros */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
