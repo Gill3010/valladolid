@@ -1,11 +1,11 @@
 import React from 'react';
-import { Check, Star, Globe, Info } from 'lucide-react';
+import { Check, Star, Globe, Info, Briefcase, GraduationCap, BookOpen, Building2 } from 'lucide-react';
 
 // Datos de los planes de costo
 const plans = [
   {
     id: 'profesor',
-    icon: '💼',
+    icon: <Briefcase size={24} strokeWidth={1.5} style={{ color: '#F4A800' }} />,
     title: 'Profesor',
     subtitle: 'RELATIC y Afiliados',
     price: '$25.00',
@@ -25,7 +25,7 @@ const plans = [
   },
   {
     id: 'postgrado',
-    icon: '🎓',
+    icon: <GraduationCap size={24} strokeWidth={1.5} style={{ color: '#007AFF' }} />,
     title: 'Postgrado',
     subtitle: 'RELATIC y Afiliados',
     price: '$20.00',
@@ -45,7 +45,7 @@ const plans = [
   },
   {
     id: 'estudiante',
-    icon: '📚',
+    icon: <BookOpen size={24} strokeWidth={1.5} style={{ color: '#22c55e' }} />,
     title: 'Estudiante',
     subtitle: 'RELATIC y Afiliados',
     price: '$5.00',
@@ -64,7 +64,7 @@ const plans = [
   },
   {
     id: 'administrativo',
-    icon: '🏢',
+    icon: <Building2 size={24} strokeWidth={1.5} style={{ color: '#FF6200' }} />,
     title: 'Administrativo',
     subtitle: 'RELATIC y Afiliados',
     price: '$10.00',
