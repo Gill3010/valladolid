@@ -15,7 +15,6 @@ import Cronograma from './components/Cronograma';
 import Comite from './components/Comite';
 import EjesTematicos from './components/EjesTematicos';
 import Costos from './components/Costos';
-import Registro from './components/Registro';
 
 // ──────────────────────────────────────────────
 // Footer
@@ -199,9 +198,6 @@ function App() {
 
         {/* Costos de inscripción */}
         <Costos />
-
-        {/* Formulario de registro */}
-        <Registro />
       </main>
 
       {/* Pie de página */}
