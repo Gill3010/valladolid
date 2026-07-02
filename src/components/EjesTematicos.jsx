@@ -12,9 +12,9 @@ import {
 const ejes = [
   {
     icon: Leaf,
-    title: 'Sostenibilidad Ambiental',
+    title: 'Educación e investigación para el desarrollo sostenible',
     description:
-      'Estrategias y políticas para el desarrollo sostenible, gestión de recursos naturales, cambio climático y transición energética en Latinoamérica.',
+      'Articulación entre procesos formativos y producción de conocimiento para enfrentar los desafíos del desarrollo sostenible. Abarca innovación educativa, prácticas pedagógicas, equidad, políticas públicas y ciencias sociales.',
     color: '#22c55e',
     bg: 'rgba(34,197,94,0.07)',
     border: 'rgba(34,197,94,0.2)',
@@ -22,9 +22,9 @@ const ejes = [
   },
   {
     icon: Cpu,
-    title: 'Innovación Tecnológica',
+    title: 'Ciencias administrativas e investigación para la gestión sostenible',
     description:
-      'Inteligencia artificial, Internet de las Cosas, robótica y transformación digital como motores del progreso científico e industrial regional.',
+      'Vinculación de ciencias económicas, administración y tecnología con la investigación aplicada. Incluye gestión estratégica, tecnologías emergentes, ciencia de datos, economía circular y emprendimiento social.',
     color: '#007AFF',
     bg: 'rgba(0,122,255,0.07)',
     border: 'rgba(0,122,255,0.2)',
@@ -161,7 +161,7 @@ const EjesTematicos = () => (
           Ejes Temáticos
         </h2>
         <p className="mt-6 max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
-          El IV Congreso Valladolid 2026 recibe ponencias, trabajos y proyectos de investigación en las siguientes áreas de conocimiento.
+          Enfoque integral que articula educación, investigación y gestión para el desarrollo sostenible de nuestra región.
         </p>
       </div>
 
@@ -178,7 +178,7 @@ const EjesTematicos = () => (
           ¿Tu investigación no encaja en estos ejes? Contáctanos para más información.
         </p>
         <a
-          href="#registro"
+          href="https://eventonexus.com/login"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105"
           style={{
             background: '#FF6200',

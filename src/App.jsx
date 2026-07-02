@@ -1,7 +1,9 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Share2, MessageCircle, ExternalLink, Play } from 'lucide-react';
-import logoValladolid from './assets/logo-valladolid.png';
-import logoItsva from './assets/logo-itsva.png';
+import logoValladolid from './assets/logos/logo-valladolid.png';
+import logoItsva from './assets/logos/logo-itsva.jpeg';
+import logoUnesca from './assets/logos/logo-unesca.png';
+import logoSantander from './assets/logos/logo-santander.png';
 
 // ──────────────────────────────────────────────
 // Importación de todos los componentes
@@ -40,10 +42,18 @@ const Footer = () => (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         {/* Logos + descripción */}
         <div className="lg:col-span-2">
-          <div className="flex items-center gap-3 mb-5">
-            <img src={logoValladolid} alt="Logo Valladolid" className="h-12 w-auto" />
-            <div className="h-8 w-px bg-white/15" />
-            <img src={logoItsva} alt="Logo ITSVA" className="h-12 w-auto" />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3 lg:gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <img src={logoValladolid} alt="Logo Valladolid" className="h-10 sm:h-12 w-auto object-contain" />
+              <div className="h-8 w-px bg-white/15" />
+              <img src={logoItsva} alt="Logo ITSVA" className="h-10 sm:h-12 w-auto object-contain" />
+            </div>
+            <div className="hidden sm:block h-8 w-px bg-white/15" />
+            <div className="flex items-center gap-3">
+              <img src={logoUnesca} alt="Logo Unesca" className="h-10 sm:h-12 w-auto object-contain" />
+              <div className="h-8 w-px bg-white/15" />
+              <img src={logoSantander} alt="Logo Santander" className="h-10 sm:h-12 w-auto object-contain" />
+            </div>
           </div>
           <p className="text-sm text-white/50 leading-relaxed max-w-sm mb-5">
             El IV Congreso Internacional de la Red Latinoamericana de Tecnología, Innovación y Ciencia (Valladolid) reúne a académicos, investigadores y estudiantes de toda Latinoamérica.
@@ -94,7 +104,7 @@ const Footer = () => (
               { label: 'Comité Organizador', href: '#comite' },
               { label: 'Ejes Temáticos', href: '#ejes' },
               { label: 'Costos', href: '#costos' },
-              { label: 'Regístrate', href: '#registro' },
+              { label: 'Regístrate', href: 'https://eventonexus.com/login' },
             ].map((l) => (
               <li key={l.label}>
                 <a

@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
+import imgFranchiska from '../assets/comite/Franchiska.jpeg';
+import imgAntonio from '../assets/comite/Antonio.jpg';
+import imgFabiola from '../assets/comite/Fabiola.jpeg';
+import imgFrancisco from '../assets/comite/Francisco.jpeg';
+import imgKelis from '../assets/comite/Kelis.jpeg';
+import imgHenry from '../assets/comite/Henry.jpg';
+import imgVannesa from '../assets/comite/vannesa.jpeg';
+
 // Miembros del comité con fotos placeholder de picsum
 const comiteData = {
   'Comité Honorífico': [
@@ -49,24 +57,48 @@ const comiteData = {
       seed: 'person-pablo',
     },
   ],
-  'Comité Organizador Local': [
+  'Comité Organizador': [
     {
-      name: 'M.C. Rodrigo Dzib Canché',
-      institution: 'ITSVA — División de Sistemas',
-      role: 'Coordinador General del Evento',
-      seed: 'person-rodrigo',
+      name: 'Magister Franchiska Kamani Ávila',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      image: imgFranchiska,
     },
     {
-      name: 'Lic. Ana Torres Pech',
-      institution: 'ITSVA — Vinculación y Difusión',
-      role: 'Coordinadora de Logística',
-      seed: 'person-ana',
+      name: 'Dr. Jesús Antonio Santos Tejero',
+      institution: 'ITSVA',
+      role: 'Miembro',
+      image: imgAntonio,
     },
     {
-      name: 'M.C. Jorge Luis Ramírez',
-      institution: 'ITSVA — División de Industrial',
-      role: 'Coordinador de Tecnología',
-      seed: 'person-jorge',
+      name: 'Dra. Fabiola Colmenero Fonseca',
+      institution: 'ITSVA',
+      role: 'Miembro',
+      image: imgFabiola,
+    },
+    {
+      name: 'Dr. Francisco Farnum Castro',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      image: imgFrancisco,
+    },
+    {
+      name: 'Lic. Kelis Paola Montes Manjarrés',
+      institution: 'University of Technology and Education',
+      role: 'Miembro',
+      image: imgKelis,
+    },
+    {
+      name: 'Dr. Henrry Ricardo Cabrera',
+      institution: 'Universidad de Cienfuegos',
+      role: 'Miembro',
+      image: imgHenry,
+    },
+    {
+      name: 'Lic. Vanessa Rubith Lazo Valles',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      image: imgVannesa,
     },
   ],
 };
@@ -75,9 +107,9 @@ const categories = Object.keys(comiteData);
 
 // Color de badge por categoría
 const categoryColor = {
-  'Comité Honorífico':        { bg: 'rgba(244,168,0,0.1)',  border: '#F4A800', text: '#F4A800' },
-  'Comité Científico':        { bg: 'rgba(0,122,255,0.08)', border: '#007AFF', text: '#007AFF' },
-  'Comité Organizador Local': { bg: 'rgba(255,98,0,0.08)',  border: '#FF6200', text: '#FF6200' },
+  'Comité Honorífico': { bg: 'rgba(244,168,0,0.1)', border: '#F4A800', text: '#F4A800' },
+  'Comité Científico': { bg: 'rgba(0,122,255,0.08)', border: '#007AFF', text: '#007AFF' },
+  'Comité Organizador': { bg: 'rgba(255,98,0,0.08)', border: '#FF6200', text: '#FF6200' },
 };
 
 const MemberCard = ({ member, category }) => {
@@ -110,7 +142,7 @@ const MemberCard = ({ member, category }) => {
           style={{ border: `3px solid ${colors.border}`, boxShadow: `0 0 16px ${colors.border}30` }}
         >
           <img
-            src={`https://picsum.photos/seed/${member.seed}/200/200`}
+            src={member.image || `https://picsum.photos/seed/${member.seed}/200/200`}
             alt={member.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronRight } from 'lucide-react';
-import logoValladolid from '../assets/logo-valladolid.png';
-import logoItsva from '../assets/logo-itsva.png';
+import logoValladolid from '../assets/logos/logo-valladolid.png';
+import logoItsva from '../assets/logos/logo-itsva.jpeg';
+import logoUnesca from '../assets/logos/logo-unesca.png';
+import logoSantander from '../assets/logos/logo-santander.png';
 
 // Navbar con drawer móvil que abre desde la DERECHA
 const Navbar = () => {
@@ -10,11 +12,11 @@ const Navbar = () => {
   const [activeLink, setActiveLink] = useState('');
 
   const navLinks = [
-    { label: 'Cronograma',   href: '#cronograma' },
-    { label: 'Comité',       href: '#comite'      },
-    { label: 'Ejes Temáticos', href: '#ejes'      },
-    { label: 'Costos',       href: '#costos'      },
-    { label: 'Regístrate',   href: '#registro', isHighlighted: true },
+    { label: 'Cronograma', href: '#cronograma' },
+    { label: 'Comité', href: '#comite' },
+    { label: 'Ejes Temáticos', href: '#ejes' },
+    { label: 'Costos', href: '#costos' },
+    { label: 'Regístrate', href: 'https://eventonexus.com/login', isHighlighted: true },
   ];
 
   useEffect(() => {
@@ -47,9 +49,8 @@ const Navbar = () => {
     <>
       {/* Barra de navegación principal */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled ? 'py-2' : 'py-3'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-3'
+          }`}
         style={{
           background: isScrolled ? '#FFFFFF' : 'rgba(255,255,255,0.92)',
           backdropFilter: 'blur(12px)',
@@ -60,23 +61,35 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logos — lado izquierdo */}
-          <div className="flex items-center gap-3">
-            <a href="#" className="flex items-center gap-3 group">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <a href="#" className="flex items-center gap-1.5 sm:gap-2 md:gap-3 group">
               <img
                 src={logoValladolid}
                 alt="Logo Valladolid"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="h-8 w-px" style={{ background: '#E5E7EB' }} />
+              <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
               <img
                 src={logoItsva}
                 alt="Logo ITSVA"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
+              <img
+                src={logoUnesca}
+                alt="Logo Unesca"
+                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
+              <img
+                src={logoSantander}
+                alt="Logo Santander"
+                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </a>
-            <div className="hidden sm:block ml-2">
-              <p className="text-xs leading-tight" style={{ color: '#6B7280' }}>IV Congreso</p>
-              <p className="text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>Valladolid 2026</p>
+            <div className="hidden md:block ml-1 lg:ml-2">
+              <p className="text-[10px] lg:text-xs leading-tight" style={{ color: '#6B7280' }}>IV Congreso</p>
+              <p className="text-xs lg:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>Valladolid 2026</p>
             </div>
           </div>
 
@@ -91,17 +104,17 @@ const Navbar = () => {
                 style={
                   link.isHighlighted
                     ? {
-                        marginLeft: '8px',
-                        padding: '10px 20px',
-                        fontWeight: 700,
-                        color: '#FFFFFF',
-                        borderRadius: '9999px',
-                        background: '#FF6200',
-                        boxShadow: '0 4px 14px rgba(255,98,0,0.3)',
-                      }
+                      marginLeft: '8px',
+                      padding: '10px 20px',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      borderRadius: '9999px',
+                      background: '#FF6200',
+                      boxShadow: '0 4px 14px rgba(255,98,0,0.3)',
+                    }
                     : activeLink === link.href
-                    ? { color: '#FF6200', background: 'rgba(255,98,0,0.06)', borderRadius: '8px' }
-                    : { color: '#0A2A43' }
+                      ? { color: '#FF6200', background: 'rgba(255,98,0,0.06)', borderRadius: '8px' }
+                      : { color: '#0A2A43' }
                 }
                 onMouseEnter={(e) => {
                   if (!link.isHighlighted && activeLink !== link.href) {
@@ -150,9 +163,8 @@ const Navbar = () => {
 
       {/* ─── DRAWER — abre desde la DERECHA ─── */}
       <div
-        className={`fixed top-0 right-0 h-full z-50 w-72 flex flex-col transition-transform duration-300 ease-in-out ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 h-full z-50 w-72 flex flex-col transition-transform duration-300 ease-in-out ${drawerOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
         style={{ background: '#0A2A43' }}
       >
         {/* Header del drawer */}
@@ -198,14 +210,14 @@ const Navbar = () => {
               style={
                 link.isHighlighted
                   ? {
-                      marginTop: '16px',
-                      color: '#FFFFFF',
-                      fontWeight: 700,
-                      background: '#FF6200',
-                    }
+                    marginTop: '16px',
+                    color: '#FFFFFF',
+                    fontWeight: 700,
+                    background: '#FF6200',
+                  }
                   : activeLink === link.href
-                  ? { color: '#F4A800', backgroundColor: 'rgba(244,168,0,0.1)' }
-                  : { color: 'rgba(255,255,255,0.85)' }
+                    ? { color: '#F4A800', backgroundColor: 'rgba(244,168,0,0.1)' }
+                    : { color: 'rgba(255,255,255,0.85)' }
               }
               onMouseEnter={(e) => {
                 if (!link.isHighlighted && activeLink !== link.href) {
