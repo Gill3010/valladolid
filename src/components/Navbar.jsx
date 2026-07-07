@@ -89,7 +89,7 @@ const Navbar = () => {
             </a>
             <div className="hidden md:block ml-1 lg:ml-2">
               <p className="text-[10px] lg:text-xs leading-tight" style={{ color: '#6B7280' }}>IV Congreso</p>
-              <p className="text-xs lg:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>Valladolid 2026</p>
+              <p className="text-xs lg:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>RELATIC 2026</p>
             </div>
           </div>
 
@@ -193,7 +193,7 @@ const Navbar = () => {
         {/* Info del congreso */}
         <div className="px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>IV Congreso Internacional</p>
-          <p className="text-lg font-bold" style={{ color: '#FFFFFF' }}>Valladolid 2026</p>
+          <p className="text-lg font-bold" style={{ color: '#FFFFFF' }}>RELATIC 2026</p>
           <p className="text-xs mt-1" style={{ color: '#F4A800' }}>
             Valladolid, Yucatán, México
           </p>

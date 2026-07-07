@@ -8,9 +8,15 @@ import imgFrancisco from '../assets/comite/Francisco.jpeg';
 import imgKelis from '../assets/comite/Kelis.jpeg';
 import imgHenry from '../assets/comite/Henry.jpg';
 import imgVannesa from '../assets/comite/vannesa.jpeg';
+import imgAugusto from '../assets/comite/Augusto.jpeg';
+import imgMonica from '../assets/comite/Monica.jpeg';
+import imgKeyla from '../assets/comite/Keyla.jpg';
+import imgEmely from '../assets/comite/Emely.png';
+import imgIsabel from '../assets/comite/Isabel.png';
 
 // Miembros del comité con fotos placeholder de picsum
 const comiteData = {
+  /*
   'Comité Honorífico': [
     {
       name: 'Dr. Roberto Alvarado Cruz',
@@ -57,6 +63,7 @@ const comiteData = {
       seed: 'person-pablo',
     },
   ],
+  */
   'Comité Organizador': [
     {
       name: 'Magister Franchiska Kamani Ávila',
@@ -99,6 +106,84 @@ const comiteData = {
       institution: 'Universidad César Vallejo, Perú',
       role: 'Miembro',
       image: imgVannesa,
+    },
+    {
+      name: 'René Ileana Velázquez Pompeyo',
+      institution: '',
+      role: 'Miembro',
+      seed: 'person-rene',
+    },
+    {
+      name: 'Dra. Livia Estela',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      seed: 'person-livia',
+    },
+    {
+      name: 'Dra. Isabel Menacho Vargas',
+      institution: 'UNMSM la Decana de América',
+      role: 'Miembro',
+      image: imgIsabel,
+    },
+    {
+      name: 'Dra. Mónica Contreras',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      image: imgMonica,
+    },
+    {
+      name: 'Dr. Augusto Bernal',
+      institution: 'Universidad de las Fuerzas Armadas, Ecuador',
+      role: 'Miembro',
+      image: imgAugusto,
+    },
+    {
+      name: 'Dra. Tania Kennedy',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      seed: 'person-tania',
+    },
+    {
+      name: 'Dra. Keyla Urbina',
+      institution: 'Universidad Latina',
+      role: 'Miembro',
+      image: imgKeyla,
+    },
+    {
+      name: 'Dra. Melisa',
+      institution: 'Universidad de Panamá',
+      role: 'Miembro',
+      seed: 'person-melisa',
+    },
+    {
+      name: 'Dra. Cindy Vianelly',
+      institution: 'ITSVA, México',
+      role: 'Miembro',
+      seed: 'person-cindy',
+    },
+    {
+      name: 'Dra. Laura Socorro',
+      institution: 'ITSVA, México',
+      role: 'Miembro',
+      seed: 'person-laura',
+    },
+    {
+      name: 'Dra. Neivy Raquel Aguilar Mena',
+      institution: 'ITSVA, México',
+      role: 'Miembro',
+      seed: 'person-naivi',
+    },
+    {
+      name: 'Emely Saa',
+      institution: 'Universidad de Panamá, Panamá',
+      role: 'Miembro',
+      image: imgEmely,
+    },
+    {
+      name: 'María de los Angeles Ruiz González',
+      institution: '',
+      role: 'Miembro',
+      seed: 'person-maria',
     },
   ],
 };
@@ -199,7 +284,7 @@ const Comite = () => {
             Comité Organizador
           </h2>
           <p className="mt-6 max-w-xl mx-auto" style={{ color: '#6B7280' }}>
-            Académicos e investigadores de instituciones líderes comprometidos con la excelencia del IV Congreso Valladolid 2026.
+            Académicos e investigadores de instituciones líderes comprometidos con la excelencia del IV Congreso RELATIC 2026.
           </p>
         </div>
 
