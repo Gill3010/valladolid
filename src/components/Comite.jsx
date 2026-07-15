@@ -13,6 +13,7 @@ import imgMonica from '../assets/comite/Monica.jpeg';
 import imgKeyla from '../assets/comite/Keyla.jpg';
 import imgEmely from '../assets/comite/Emely.png';
 import imgIsabel from '../assets/comite/Isabel.png';
+import imgNaivi from '../assets/comite/Naivi.png';
 
 // Miembros del comité con fotos placeholder de picsum
 const comiteData = {
@@ -168,10 +169,10 @@ const comiteData = {
       seed: 'person-laura',
     },
     {
-      name: 'Dra. Neivy Raquel Aguilar Mena',
-      institution: 'ITSVA, México',
+      name: 'Dra. Naivi Raquel Aguilar Mena',
+      institution: 'ISTVA, México',
       role: 'Miembro',
-      seed: 'person-naivi',
+      image: imgNaivi,
     },
     {
       name: 'Emely Saa',
@@ -180,7 +181,7 @@ const comiteData = {
       image: imgEmely,
     },
     {
-      name: 'María de los Angeles Ruiz González',
+      name: 'Dra. María de los Angeles Ruiz González',
       institution: '',
       role: 'Miembro',
       seed: 'person-maria',

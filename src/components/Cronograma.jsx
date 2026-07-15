@@ -42,14 +42,14 @@ const schedule = {
 };
 
 const typeStyles = {
-  keynote:      { bg: 'rgba(0,122,255,0.06)',  border: '#007AFF', dot: '#007AFF' },
-  workshop:     { bg: 'rgba(244,168,0,0.07)',  border: '#F4A800', dot: '#F4A800' },
-  panel:        { bg: 'rgba(44,0,85,0.05)',    border: '#9B59B6', dot: '#9B59B6' },
-  presentation: { bg: 'rgba(0,2,233,0.06)',    border: '#0002E9', dot: '#0002E9' },
-  break:        { bg: '#F8F9FA',               border: '#E5E7EB', dot: '#9CA3AF' },
-  registration: { bg: '#F8F9FA',               border: '#E5E7EB', dot: '#9CA3AF' },
-  ceremony:     { bg: 'rgba(255,98,0,0.06)',   border: '#FF6200', dot: '#FF6200' },
-  social:       { bg: 'rgba(244,168,0,0.07)',  border: '#F4A800', dot: '#F4A800' },
+  keynote: { bg: 'rgba(0,122,255,0.06)', border: '#007AFF', dot: '#007AFF' },
+  workshop: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800' },
+  panel: { bg: 'rgba(44,0,85,0.05)', border: '#9B59B6', dot: '#9B59B6' },
+  presentation: { bg: 'rgba(0,2,233,0.06)', border: '#0002E9', dot: '#0002E9' },
+  break: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF' },
+  registration: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF' },
+  ceremony: { bg: 'rgba(255,98,0,0.06)', border: '#FF6200', dot: '#FF6200' },
+  social: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800' },
 };
 
 const days = Object.keys(schedule);
@@ -100,10 +100,10 @@ const Cronograma = () => {
               style={
                 activeDay === day
                   ? {
-                      background: '#FF6200',
-                      color: 'white',
-                      boxShadow: '0 3px 10px rgba(255,98,0,0.3)',
-                    }
+                    background: '#FF6200',
+                    color: 'white',
+                    boxShadow: '0 3px 10px rgba(255,98,0,0.3)',
+                  }
                   : { color: '#6B7280' }
               }
               onMouseEnter={(e) => {

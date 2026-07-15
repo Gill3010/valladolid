@@ -60,7 +60,7 @@ const Countdown = () => {
           animation-play-state: paused;
         }
       `}</style>
-      
+
       {/* Máscaras de gradiente laterales para un efecto elegante de entrada/salida */}
       <div className="absolute left-0 top-0 bottom-0 w-8 md:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #0A2A43, transparent)' }} />
       <div className="absolute right-0 top-0 bottom-0 w-8 md:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #0A2A43, transparent)' }} />
@@ -71,7 +71,7 @@ const Countdown = () => {
               Esto garantiza que el loop sea matemáticamente perfecto y no existan cortes ni saltos. */}
           {[...Array(6)].map((_, index) => (
             <div key={index} className="flex items-center gap-10 sm:gap-16 px-5 sm:px-8 shrink-0">
-              
+
               {/* ── 1. Componente del Countdown ── */}
               <div className="flex items-center gap-3">
                 <Clock size={14} style={{ color: '#F4A800' }} />
@@ -87,7 +87,7 @@ const Countdown = () => {
                 >
                   Cuenta regresiva
                 </span>
-                
+
                 {expired ? (
                   <div className="text-sm font-bold ml-2" style={{ color: '#F4A800' }}>
                     🎉 ¡El Congreso Valladolid 2026 ha comenzado!
@@ -144,7 +144,7 @@ const Countdown = () => {
                 <span style={{ color: '#007AFF' }}>•</span>
                 Presencial & Virtual
               </span>
-              
+
               {/* Separador para conectar con el inicio de la siguiente iteración */}
               <span style={{ color: 'rgba(255,255,255,0.2)' }} className="ml-2 sm:ml-4 flex items-center">•</span>
             </div>
