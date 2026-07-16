@@ -5,10 +5,12 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Countdown from './components/Countdown';
+import EventIdentity from './components/EventIdentity';
 import Cronograma from './components/Cronograma';
 import Comite from './components/Comite';
 import EjesTematicos from './components/EjesTematicos';
 import Costos from './components/Costos';
+import Publicaciones from './components/Publicaciones';
 import Footer from './components/Footer';
 
 
@@ -22,7 +24,7 @@ function App() {
       {/* Barra de navegación (fixed) */}
       <Navbar />
 
-      {/* Cintillo de cuenta regresiva — debajo del navbar, encima del hero */}
+      {/* Cintillo de cuenta regresiva — debajo del navbar (posición intacta) */}
       {/* paddingTop: 72px compensa la altura del navbar fijo */}
       <div style={{ paddingTop: '72px' }}>
         <Countdown />
@@ -30,7 +32,10 @@ function App() {
 
       {/* Contenido principal */}
       <main>
-        {/* Sección principal / Slider hero */}
+        {/* Identidad institucional del congreso — lo primero que se lee */}
+        <EventIdentity />
+
+        {/* Sección principal / Slider hero (Comité Editorial) */}
         <Hero />
 
         {/* Cronograma de actividades */}
@@ -44,6 +49,9 @@ function App() {
 
         {/* Costos de inscripción */}
         <Costos />
+
+        {/* Portales de publicación de productos científicos */}
+        <Publicaciones />
       </main>
 
       {/* Pie de página */}

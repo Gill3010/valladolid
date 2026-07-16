@@ -16,13 +16,14 @@ const Navbar = () => {
     { label: 'Comité', href: '#comite' },
     { label: 'Ejes Temáticos', href: '#ejes' },
     { label: 'Costos', href: '#costos' },
+    { label: 'Publicaciones', href: '#publicaciones' },
     { label: 'Regístrate', href: 'https://eventonexus.com/login', isHighlighted: true },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      const sections = ['cronograma', 'comite', 'ejes', 'costos', 'registro'];
+      const sections = ['cronograma', 'comite', 'ejes', 'costos', 'publicaciones', 'registro'];
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 100) {

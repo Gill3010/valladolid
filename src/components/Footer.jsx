@@ -89,6 +89,7 @@ const Footer = () => (
               { label: 'Comité Organizador', href: '#comite' },
               { label: 'Ejes Temáticos', href: '#ejes' },
               { label: 'Costos', href: '#costos' },
+              { label: 'Publicaciones', href: '#publicaciones' },
               { label: 'Regístrate', href: 'https://eventonexus.com/login' },
             ].map((l) => (
               <li key={l.label}>
