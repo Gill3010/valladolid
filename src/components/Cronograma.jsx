@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, Mic, Coffee, BookOpen, Award, Users } from 'lucide-react';
+import { Clock, Mic, Coffee, BookOpen, Award, Users, ChevronRight } from 'lucide-react';
 
 // Datos del cronograma por día
 const schedule = {
@@ -42,14 +42,21 @@ const schedule = {
 };
 
 const typeStyles = {
-  keynote: { bg: 'rgba(0,122,255,0.06)', border: '#007AFF', dot: '#007AFF' },
-  workshop: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800' },
-  panel: { bg: 'rgba(44,0,85,0.05)', border: '#9B59B6', dot: '#9B59B6' },
-  presentation: { bg: 'rgba(0,2,233,0.06)', border: '#0002E9', dot: '#0002E9' },
-  break: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF' },
-  registration: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF' },
-  ceremony: { bg: 'rgba(255,98,0,0.06)', border: '#FF6200', dot: '#FF6200' },
-  social: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800' },
+  keynote: { bg: 'rgba(0,122,255,0.06)', border: '#007AFF', dot: '#007AFF', label: 'Conferencia' },
+  workshop: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800', label: 'Taller' },
+  panel: { bg: 'rgba(44,0,85,0.05)', border: '#9B59B6', dot: '#9B59B6', label: 'Panel' },
+  presentation: { bg: 'rgba(0,2,233,0.06)', border: '#0002E9', dot: '#0002E9', label: 'Ponencia' },
+  break: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF', label: 'Receso' },
+  registration: { bg: '#F8F9FA', border: '#E5E7EB', dot: '#9CA3AF', label: 'Registro' },
+  ceremony: { bg: 'rgba(255,98,0,0.06)', border: '#FF6200', dot: '#FF6200', label: 'Ceremonia' },
+  social: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800', label: 'Social' },
+};
+
+// Etiquetas textuales para los tabs con fecha completa
+const dayLabels = {
+  '7 Oct': { short: '7 Oct', full: 'Miércoles 7', date: 'Octubre 2026' },
+  '8 Oct': { short: '8 Oct', full: 'Jueves 8', date: 'Octubre 2026' },
+  '9 Oct': { short: '9 Oct', full: 'Viernes 9', date: 'Octubre 2026' },
 };
 
 const days = Object.keys(schedule);
@@ -72,108 +79,163 @@ const Cronograma = () => {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Encabezado */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <span
-            className="inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+            className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-5"
             style={{ background: 'rgba(244,168,0,0.1)', color: '#F4A800', border: '1px solid rgba(244,168,0,0.3)' }}
           >
             Programa Académico
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black section-underline" style={{ color: '#0A2A43' }}>
+          <h2
+            className="text-3xl sm:text-4xl lg:text-5xl font-black section-underline"
+            style={{ color: '#0A2A43' }}
+          >
             Cronograma de Actividades
           </h2>
-          <p className="mt-6 max-w-xl mx-auto" style={{ color: '#6B7280' }}>
+          <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: '#4B5563' }}>
             Tres días de conferencias magistrales, talleres, ponencias y experiencias culturales en Valladolid, Yucatán.
           </p>
         </div>
 
-        {/* Tabs de días */}
+        {/* Tabs de días — rediseñados con más presencia */}
         <div
-          className="flex rounded-2xl p-1.5 mb-10 gap-1"
+          className="flex rounded-2xl p-1.5 mb-12 gap-1.5"
           style={{ background: '#F8F9FA', border: '1px solid #E5E7EB' }}
         >
-          {days.map((day) => (
-            <button
-              key={day}
-              onClick={() => setActiveDay(day)}
-              className="flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all duration-300"
-              style={
-                activeDay === day
-                  ? {
-                    background: '#FF6200',
-                    color: 'white',
-                    boxShadow: '0 3px 10px rgba(255,98,0,0.3)',
-                  }
-                  : { color: '#6B7280' }
-              }
-              onMouseEnter={(e) => {
-                if (activeDay !== day) e.currentTarget.style.color = '#374151';
-              }}
-              onMouseLeave={(e) => {
-                if (activeDay !== day) e.currentTarget.style.color = '#6B7280';
-              }}
-            >
-              {day}
-            </button>
-          ))}
+          {days.map((day) => {
+            const label = dayLabels[day];
+            const isActive = activeDay === day;
+            return (
+              <button
+                key={day}
+                onClick={() => setActiveDay(day)}
+                className="flex-1 py-3.5 sm:py-4 px-3 sm:px-5 rounded-xl font-bold transition-all duration-300"
+                style={
+                  isActive
+                    ? {
+                      background: '#FF6200',
+                      color: 'white',
+                      boxShadow: '0 4px 14px rgba(255,98,0,0.3)',
+                    }
+                    : { color: '#4B5563' }
+                }
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#0A2A43';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#4B5563';
+                }}
+              >
+                <span className="block text-sm sm:text-base font-bold">{label.full}</span>
+                <span
+                  className="block text-[10px] sm:text-xs mt-0.5 font-medium"
+                  style={{ opacity: isActive ? 0.85 : 0.6 }}
+                >
+                  {label.date}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Contador de actividades del día */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="h-px flex-1" style={{ background: '#E5E7EB' }} />
+          <span className="text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full"
+            style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#4B5563' }}
+          >
+            {schedule[activeDay].length} actividades programadas
+          </span>
+          <div className="h-px flex-1" style={{ background: '#E5E7EB' }} />
         </div>
 
         {/* Timeline del día activo */}
         <div className="relative">
           {/* Línea vertical del timeline */}
           <div
-            className="absolute left-5 sm:left-8 top-0 bottom-0 w-px"
-            style={{ background: 'linear-gradient(180deg, #FF6200, #F4A800, transparent)' }}
+            className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5"
+            style={{ background: 'linear-gradient(180deg, #FF6200, #F4A800 50%, #E5E7EB)' }}
           />
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {schedule[activeDay].map((item, index) => {
               const Icon = item.icon;
               const style = typeStyles[item.type] || typeStyles.break;
               return (
                 <div
                   key={index}
-                  className="relative flex items-start gap-4 sm:gap-6 pl-12 sm:pl-16 card-hover"
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  className="relative flex items-start gap-4 sm:gap-6 pl-14 sm:pl-20 group"
                 >
                   {/* Dot del timeline */}
                   <div
-                    className="absolute left-2.5 sm:left-5 top-4 w-5 h-5 rounded-full flex items-center justify-center z-10"
+                    className="absolute left-3.5 sm:left-5.5 top-5 w-6 h-6 rounded-full flex items-center justify-center z-10 transition-transform duration-200 group-hover:scale-110"
                     style={{
                       background: style.dot,
-                      boxShadow: `0 0 8px ${style.dot}60`,
+                      boxShadow: `0 0 10px ${style.dot}50`,
                     }}
                   >
-                    <div className="w-2 h-2 rounded-full bg-white opacity-80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-white opacity-80" />
                   </div>
 
                   {/* Card */}
                   <div
-                    className="flex-1 p-4 rounded-xl transition-all duration-300"
+                    className="flex-1 p-5 sm:p-6 rounded-xl transition-all duration-300 group-hover:shadow-md"
                     style={{
                       background: style.bg,
-                      border: `1px solid ${style.border}40`,
+                      border: `1px solid ${style.border}30`,
+                      borderLeft: `3px solid ${style.border}`,
                     }}
                   >
-                    <div className="flex items-start gap-3">
+                    {/* Fila superior: hora + badge de tipo */}
+                    <div className="flex items-center gap-3 mb-3 flex-wrap">
                       {/* Hora */}
                       <div
-                        className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 rounded-lg"
-                        style={{ background: '#F8F9FA', border: '1px solid #E5E7EB' }}
+                        className="flex-shrink-0 flex items-center gap-2 px-3.5 py-1.5 rounded-lg"
+                        style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
                       >
-                        <Clock size={12} style={{ color: '#F4A800' }} />
-                        <span className="text-xs font-bold tabular-nums" style={{ color: '#F4A800' }}>
+                        <Clock size={14} style={{ color: style.dot }} />
+                        <span
+                          className="text-sm font-bold tabular-nums"
+                          style={{ color: style.dot }}
+                        >
                           {item.time}
                         </span>
                       </div>
+                      {/* Badge de tipo */}
+                      <span
+                        className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                        style={{
+                          background: `${style.dot}12`,
+                          color: style.dot,
+                          border: `1px solid ${style.dot}25`,
+                        }}
+                      >
+                        {style.label}
+                      </span>
+                    </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Icon size={14} style={{ color: style.dot, flexShrink: 0 }} />
-                          <p className="font-bold text-sm leading-snug" style={{ color: '#0A2A43' }}>{item.title}</p>
-                        </div>
+                    {/* Contenido principal */}
+                    <div className="flex items-start gap-3">
+                      <Icon
+                        size={18}
+                        className="mt-0.5 shrink-0"
+                        style={{ color: style.dot }}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h4
+                          className="font-bold text-sm sm:text-base leading-snug mb-1"
+                          style={{ color: '#0A2A43' }}
+                        >
+                          {item.title}
+                        </h4>
                         {item.speaker && (
-                          <p className="text-xs pl-5" style={{ color: '#6B7280' }}>{item.speaker}</p>
+                          <p
+                            className="text-xs sm:text-sm leading-relaxed flex items-center gap-1.5"
+                            style={{ color: '#4B5563' }}
+                          >
+                            <ChevronRight size={12} style={{ color: style.dot, opacity: 0.6, flexShrink: 0 }} />
+                            {item.speaker}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -185,7 +247,7 @@ const Cronograma = () => {
         </div>
 
         {/* Leyenda */}
-        <div className="mt-10 flex flex-wrap gap-3 justify-center">
+        <div className="mt-12 flex flex-wrap gap-3 justify-center">
           {[
             { label: 'Conferencia magistral', color: '#007AFF' },
             { label: 'Taller', color: '#F4A800' },
@@ -195,10 +257,10 @@ const Cronograma = () => {
           ].map((l) => (
             <span
               key={l.label}
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
-              style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#374151' }}
+              className="flex items-center gap-2 text-xs sm:text-sm px-3.5 py-2 rounded-full font-medium"
+              style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#1F2937' }}
             >
-              <span className="w-2 h-2 rounded-full" style={{ background: l.color }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: l.color }} />
               {l.label}
             </span>
           ))}

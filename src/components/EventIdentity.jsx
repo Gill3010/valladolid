@@ -30,7 +30,7 @@ const EventIdentity = () => {
 
             <p
               className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] mb-3"
-              style={{ color: '#6B7280' }}
+              style={{ color: '#4B5563' }}
             >
               Red Latinoamericana de Investigaciones Cualitativas· RELATIC
             </p>
@@ -51,7 +51,7 @@ const EventIdentity = () => {
 
             <p
               className="text-base sm:text-lg font-light italic leading-relaxed max-w-xl"
-              style={{ color: '#374151' }}
+              style={{ color: '#1F2937' }}
             >
               Conectando el conocimiento de Latinoamérica
             </p>
@@ -79,13 +79,13 @@ const EventIdentity = () => {
                 </div>
                 <div className="min-w-0">
                   <p
-                    className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5"
-                    style={{ color: '#6B7280' }}
+                    className="text-[11px] font-bold uppercase tracking-[0.12em] mb-0.5"
+                    style={{ color: '#4B5563' }}
                   >
                     Fechas
                   </p>
                   <p
-                    className="text-sm font-bold leading-tight"
+                    className="text-sm sm:text-base font-bold leading-tight"
                     style={{ color: '#0A2A43', fontVariantNumeric: 'tabular-nums' }}
                   >
                     7–9 Octubre 2026
@@ -105,12 +105,12 @@ const EventIdentity = () => {
                   style={{ background: '#FF6200' }}
                 >
                   <span
-                    className="text-[9px] font-bold uppercase tracking-[0.1em] mb-0.5"
-                    style={{ color: 'rgba(255,255,255,0.75)' }}
+                    className="text-[10px] font-bold uppercase tracking-[0.1em] mb-0.5"
+                    style={{ color: 'rgba(255,255,255,0.80)' }}
                   >
                     Modalidad
                   </span>
-                  <span className="text-sm font-bold text-white leading-none">
+                  <span className="text-sm sm:text-base font-bold text-white leading-none">
                     Presencial
                   </span>
                 </div>
@@ -124,12 +124,12 @@ const EventIdentity = () => {
                   style={{ background: '#007AFF' }}
                 >
                   <span
-                    className="text-[9px] font-bold uppercase tracking-[0.1em] mb-0.5"
-                    style={{ color: 'rgba(255,255,255,0.75)' }}
+                    className="text-[10px] font-bold uppercase tracking-[0.1em] mb-0.5"
+                    style={{ color: 'rgba(255,255,255,0.80)' }}
                   >
                     Híbrida
                   </span>
-                  <span className="text-sm font-bold text-white leading-none">
+                  <span className="text-sm sm:text-base font-bold text-white leading-none">
                     Virtual
                   </span>
                 </div>
@@ -153,12 +153,12 @@ const EventIdentity = () => {
                 </div>
                 <div className="min-w-0">
                   <p
-                    className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5"
-                    style={{ color: '#6B7280' }}
+                    className="text-[11px] font-bold uppercase tracking-[0.12em] mb-0.5"
+                    style={{ color: '#4B5563' }}
                   >
                     Sede
                   </p>
-                  <p className="text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>
+                  <p className="text-sm sm:text-base font-bold leading-tight" style={{ color: '#0A2A43' }}>
                     ITSVA, Valladolid, Yucatán
                   </p>
                 </div>
@@ -170,7 +170,7 @@ const EventIdentity = () => {
               href="https://eventonexus.com/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm sm:text-base font-bold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: '#FF6200',
                 color: '#FFFFFF',

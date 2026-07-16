@@ -89,7 +89,7 @@ const Navbar = () => {
               />
             </a>
             <div className="hidden md:block ml-1 lg:ml-2">
-              <p className="text-[10px] lg:text-xs leading-tight" style={{ color: '#6B7280' }}>IV Congreso</p>
+              <p className="text-[11px] lg:text-xs leading-tight" style={{ color: '#4B5563' }}>IV Congreso</p>
               <p className="text-xs lg:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>RELATIC 2026</p>
             </div>
           </div>

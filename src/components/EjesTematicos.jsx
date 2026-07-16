@@ -6,6 +6,7 @@ import {
   GraduationCap,
   BarChart3,
   MapPin,
+  ArrowRight,
 } from 'lucide-react';
 
 // Ejes temáticos del congreso
@@ -76,60 +77,82 @@ const EjeCard = ({ eje, index }) => {
   const Icon = eje.icon;
   return (
     <div
-      className="group relative rounded-2xl p-6 flex flex-col gap-4 cursor-default transition-all duration-300"
+      className="group relative rounded-2xl overflow-hidden flex flex-col cursor-default transition-all duration-300"
       style={{
         background: '#FFFFFF',
         border: `1px solid #E5E7EB`,
-        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderTopColor = eje.hoverBorder;
-        e.currentTarget.style.borderTopWidth = '3px';
-        e.currentTarget.style.transform = 'translateY(-5px)';
-        e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.09)';
+        e.currentTarget.style.borderColor = eje.hoverBorder;
+        e.currentTarget.style.transform = 'translateY(-6px)';
+        e.currentTarget.style.boxShadow = `0 16px 36px rgba(0,0,0,0.10), 0 0 0 1px ${eje.hoverBorder}30`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderTopColor = '#E5E7EB';
-        e.currentTarget.style.borderTopWidth = '1px';
+        e.currentTarget.style.borderColor = '#E5E7EB';
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)';
+        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
       }}
     >
-      {/* Número de eje */}
+      {/* Barra de color superior */}
       <div
-        className="absolute top-4 right-4 text-5xl font-black"
-        style={{ color: eje.color, opacity: 0.07 }}
-      >
-        {String(index + 1).padStart(2, '0')}
-      </div>
-
-      {/* Ícono */}
-      <div
-        className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-        style={{ background: eje.bg, border: `1px solid ${eje.border}` }}
-      >
-        <Icon size={24} style={{ color: eje.color }} />
-      </div>
-
-      {/* Línea de acento */}
-      <div
-        className="h-0.5 w-8 rounded-full transition-all duration-300 group-hover:w-full"
-        style={{ background: `linear-gradient(90deg, ${eje.color}, transparent)` }}
+        className="h-1 w-full transition-all duration-300"
+        style={{ background: `linear-gradient(90deg, ${eje.color}, ${eje.color}50)` }}
+        aria-hidden="true"
       />
 
-      {/* Contenido */}
-      <div>
-        <h3 className="text-lg font-bold mb-2 leading-tight" style={{ color: '#0A2A43' }}>{eje.title}</h3>
-        <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{eje.description}</p>
-      </div>
+      <div className="p-6 sm:p-7 flex flex-col gap-5 flex-1">
+        {/* Header: número + icono */}
+        <div className="flex items-start justify-between">
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+            style={{
+              background: eje.bg,
+              border: `1.5px solid ${eje.border}`,
+            }}
+          >
+            <Icon size={28} style={{ color: eje.color }} />
+          </div>
+          {/* Número de eje — más visible */}
+          <span
+            className="text-4xl sm:text-5xl font-black leading-none select-none transition-opacity duration-300 group-hover:opacity-20"
+            style={{ color: eje.color, opacity: 0.1 }}
+          >
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
 
-      {/* Flecha CTA en hover */}
-      <div
-        className="flex items-center gap-2 text-xs font-semibold mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ color: eje.color }}
-      >
-        <span>Enviar ponencia</span>
-        <div className="h-px flex-1" style={{ background: eje.color }} />
+        {/* Línea de acento animada */}
+        <div
+          className="h-0.5 w-10 rounded-full transition-all duration-400 group-hover:w-full"
+          style={{ background: `linear-gradient(90deg, ${eje.color}, ${eje.color}30)` }}
+        />
+
+        {/* Título — más grande y prominente */}
+        <h3
+          className="text-lg sm:text-xl font-bold leading-snug"
+          style={{ color: '#0A2A43' }}
+        >
+          {eje.title}
+        </h3>
+
+        {/* Descripción — mayor tamaño y mejor contraste */}
+        <p
+          className="text-sm sm:text-base leading-relaxed flex-1"
+          style={{ color: '#374151' }}
+        >
+          {eje.description}
+        </p>
+
+        {/* CTA en hover — más prominente */}
+        <div
+          className="flex items-center gap-2 text-sm font-semibold mt-auto opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+          style={{ color: eje.color }}
+        >
+          <span>Enviar ponencia</span>
+          <ArrowRight size={14} />
+          <div className="h-px flex-1" style={{ background: `${eje.color}40` }} />
+        </div>
       </div>
     </div>
   );
@@ -149,32 +172,50 @@ const EjesTematicos = () => (
     />
 
     <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Encabezado */}
-      <div className="text-center mb-14">
+      {/* Encabezado — más impactante */}
+      <div className="text-center mb-16">
         <span
-          className="inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+          className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-5"
           style={{ background: 'rgba(255,98,0,0.08)', color: '#FF6200', border: '1px solid rgba(255,98,0,0.25)' }}
         >
           Convocatoria
         </span>
-        <h2 className="text-3xl sm:text-4xl font-black section-underline" style={{ color: '#0A2A43' }}>
+        <h2
+          className="text-3xl sm:text-4xl lg:text-5xl font-black section-underline"
+          style={{ color: '#0A2A43' }}
+        >
           Ejes Temáticos
         </h2>
-        <p className="mt-6 max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
+        <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: '#4B5563' }}>
           Enfoque integral que articula educación, investigación y gestión para el desarrollo sostenible de nuestra región.
         </p>
+
+        {/* Contador de ejes */}
+        <div className="mt-8 inline-flex items-center gap-3">
+          {ejes.map((eje, i) => (
+            <div
+              key={i}
+              className="w-2.5 h-2.5 rounded-full"
+              style={{ background: eje.color }}
+              title={eje.title}
+            />
+          ))}
+          <span className="text-sm font-semibold ml-1" style={{ color: '#4B5563' }}>
+            {ejes.length} líneas de investigación
+          </span>
+        </div>
       </div>
 
-      {/* Grid de ejes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+      {/* Grid de ejes — gap más generoso */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
         {ejes.map((eje, i) => (
           <EjeCard key={i} eje={eje} index={i} />
         ))}
       </div>
 
       {/* CTA inferior */}
-      <div className="mt-14 text-center">
-        <p className="text-sm mb-4" style={{ color: '#9CA3AF' }}>
+      <div className="mt-16 text-center">
+        <p className="text-sm sm:text-base mb-5" style={{ color: '#4B5563' }}>
           ¿Tu investigación no encaja en estos ejes? Contáctanos para más información.
         </p>
         <a
@@ -194,6 +235,7 @@ const EjesTematicos = () => (
           }}
         >
           Enviar mi ponencia
+          <ArrowRight size={16} />
         </a>
       </div>
     </div>

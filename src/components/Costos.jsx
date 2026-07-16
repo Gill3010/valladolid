@@ -135,7 +135,7 @@ const PlanCard = ({ plan }) => (
           >
             {plan.title}
           </h3>
-          <p className="text-xs" style={{ color: '#6B7280' }}>{plan.subtitle}</p>
+          <p className="text-sm" style={{ color: '#4B5563' }}>{plan.subtitle}</p>
         </div>
       </div>
 
@@ -148,10 +148,10 @@ const PlanCard = ({ plan }) => (
           >
             {plan.price}
           </span>
-          <span className="text-base font-semibold" style={{ color: '#6B7280' }}>{plan.currency}</span>
+          <span className="text-base font-semibold" style={{ color: '#4B5563' }}>{plan.currency}</span>
         </div>
         {plan.usd && (
-          <p className="text-sm mt-1" style={{ color: '#9CA3AF' }}>{plan.usd}</p>
+          <p className="text-sm mt-1" style={{ color: '#6B7280' }}>{plan.usd}</p>
         )}
         <div
           className="mt-3 h-px"
@@ -172,7 +172,7 @@ const PlanCard = ({ plan }) => (
             >
               <Check size={10} style={{ color: plan.color }} />
             </div>
-            <span className="text-sm leading-snug" style={{ color: '#374151' }}>{b}</span>
+            <span className="text-sm leading-snug" style={{ color: '#1F2937' }}>{b}</span>
           </li>
         ))}
       </ul>
@@ -243,17 +243,17 @@ const Costos = () => (
 
     <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Encabezado */}
-      <div className="text-center mb-14">
+      <div className="text-center mb-16">
         <span
-          className="inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+          className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-5"
           style={{ background: 'rgba(244,168,0,0.1)', color: '#F4A800', border: '1px solid rgba(244,168,0,0.3)' }}
         >
           Inversión
         </span>
-        <h2 className="text-3xl sm:text-4xl font-black section-underline" style={{ color: '#0A2A43' }}>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black section-underline" style={{ color: '#0A2A43' }}>
           Costos de Registro
         </h2>
-        <p className="mt-6 max-w-xl mx-auto" style={{ color: '#6B7280' }}>
+        <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl mx-auto" style={{ color: '#4B5563' }}>
           Inversión accesible para participar en uno de los congresos académicos más importantes de la red Valladolid.
         </p>
       </div>
@@ -268,7 +268,7 @@ const Costos = () => (
         }}
       >
         <Info size={20} style={{ color: '#FF6200', flexShrink: 0, marginTop: '2px' }} className="sm:mt-0" />
-        <p className="text-sm font-medium" style={{ color: '#0A2A43' }}>
+        <p className="text-sm sm:text-base font-medium" style={{ color: '#0A2A43' }}>
           Importante: Los asistentes que <strong style={{ color: '#FF6200' }}>no estén afiliados</strong> tendrán un incremento del 15% sobre los costos listados.
         </p>
       </div>
@@ -289,7 +289,7 @@ const Costos = () => (
         }}
       >
         <Globe size={18} style={{ color: '#007AFF', flexShrink: 0 }} />
-        <p className="text-sm" style={{ color: '#6B7280' }}>
+        <p className="text-sm" style={{ color: '#4B5563' }}>
           Los costos se cobrarán en el equivalente a la moneda local de tu país al momento de realizar el pago.
         </p>
       </div>

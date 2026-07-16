@@ -40,7 +40,7 @@ const Footer = () => (
               <img src={logoSantander} alt="Logo Santander" className="h-10 sm:h-12 w-auto object-contain" />
             </div>
           </div>
-          <p className="text-sm text-white/50 leading-relaxed max-w-sm mb-5">
+          <p className="text-sm leading-relaxed max-w-sm mb-5" style={{ color: 'rgba(255,255,255,0.55)' }}>
             El IV Congreso Internacional de la Red Latinoamericana de Investigaciones Cualitativas (RELATIC Panamá) reúne a académicos, investigadores y estudiantes de toda Latinoamérica.
           </p>
           {/* Redes sociales */}
@@ -95,7 +95,8 @@ const Footer = () => (
               <li key={l.label}>
                 <a
                   href={l.href}
-                  className="text-sm text-white/50 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+                  className="text-sm leading-relaxed hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+                  style={{ color: 'rgba(255,255,255,0.55)' }}
                 >
                   <span
                     className="w-1 h-1 rounded-full"
@@ -119,20 +120,20 @@ const Footer = () => (
           <ul className="space-y-4">
             <li className="flex items-start gap-3">
               <MapPin size={15} style={{ color: '#FF6200', flexShrink: 0, marginTop: '2px' }} />
-              <span className="text-sm text-white/50 leading-snug">
+              <span className="text-sm leading-snug" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 Instituto Tecnológico Superior de Valladolid<br />
                 Valladolid, Yucatán, México
               </span>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={15} style={{ color: '#FF6200', flexShrink: 0 }} />
-              <a href="mailto:congreso@valladolid.org" className="text-sm text-white/50 hover:text-white transition-colors">
+              <a href="mailto:congreso@valladolid.org" className="text-sm hover:text-white transition-colors" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 congreso@valladolid.org
               </a>
             </li>
             <li className="flex items-center gap-3">
               <Phone size={15} style={{ color: '#FF6200', flexShrink: 0 }} />
-              <span className="text-sm text-white/50">+52 985 856 0123</span>
+              <span className="text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>+52 985 856 0123</span>
             </li>
           </ul>
         </div>
@@ -143,10 +144,10 @@ const Footer = () => (
 
       {/* Copyright */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-        <p className="text-xs text-white/30">
+        <p className="text-xs sm:text-sm" style={{ color: 'rgba(255,255,255,0.35)' }}>
           © {new Date().getFullYear()} — IV Congreso Internacional RELATIC 2026 · ITSVA, UNESCA, U. Santander
         </p>
-        <p className="text-xs text-white/20">
+        <p className="text-xs sm:text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
           Todos los derechos reservados · RELATIC Panamá 2026
         </p>
       </div>
