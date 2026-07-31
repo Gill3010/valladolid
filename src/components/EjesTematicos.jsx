@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Leaf,
   Cpu,
@@ -7,6 +7,8 @@ import {
   BarChart3,
   MapPin,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 // ── Importación de imágenes de ejes temáticos ──
@@ -16,6 +18,8 @@ import imgEje3 from '../assets/ejestematicos/eje3.png';
 import imgEje4 from '../assets/ejestematicos/eje4.png';
 import imgEje5 from '../assets/ejestematicos/eje5.png';
 import imgEje6 from '../assets/ejestematicos/eje6.png';
+
+const AUTOPLAY_MS = 5000;
 
 // Ejes temáticos del congreso
 const ejes = [
@@ -91,7 +95,7 @@ const EjeCard = ({ eje, index }) => {
   const Icon = eje.icon;
   return (
     <div
-      className="group relative rounded-2xl overflow-hidden flex flex-col cursor-default transition-all duration-300"
+      className="group relative rounded-2xl overflow-hidden flex flex-col h-full cursor-default transition-all duration-300"
       style={{
         background: '#FFFFFF',
         border: `1px solid #E5E7EB`,
@@ -131,6 +135,7 @@ const EjeCard = ({ eje, index }) => {
               alt={eje.title}
               className="w-full h-full object-contain p-1"
               loading="lazy"
+              draggable={false}
             />
           </div>
           <figcaption className="sr-only">{eje.title}</figcaption>
@@ -192,6 +197,311 @@ const EjeCard = ({ eje, index }) => {
   );
 };
 
+function useVisibleCount() {
+  const [count, setCount] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setCount(3);
+      else if (w >= 640) setCount(2);
+      else setCount(1);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  return count;
+}
+
+function useGapPx() {
+  const [gap, setGap] = useState(24);
+
+  useEffect(() => {
+    const update = () => setGap(window.innerWidth >= 640 ? 28 : 24);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  return gap;
+}
+
+const EjesCarousel = ({ items }) => {
+  const total = items.length;
+  const visibleCount = useVisibleCount();
+  const gapPx = useGapPx();
+  const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const pointerStartX = useRef(null);
+  const dragDelta = useRef(0);
+  const resumeTimer = useRef(null);
+  const wrapping = useRef(false);
+
+  // Clones al final para el loop infinito (mismo gap / ancho que el original)
+  const slides = [...items, ...items.slice(0, visibleCount)];
+
+  const slideWidth = `calc((100% - ${(visibleCount - 1) * gapPx}px) / ${visibleCount})`;
+  const xOffset = `calc(-${index} * (${slideWidth} + ${gapPx}px))`;
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // Si cambia el nº visible, mantén el índice dentro del rango real
+  useEffect(() => {
+    setAnimate(false);
+    setIndex((i) => i % total);
+    const id = requestAnimationFrame(() => setAnimate(true));
+    return () => cancelAnimationFrame(id);
+  }, [visibleCount, total]);
+
+  const pauseTemporarily = () => {
+    setPaused(true);
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => setPaused(false), AUTOPLAY_MS * 1.5);
+  };
+
+  const next = () => {
+    if (wrapping.current) return;
+    setAnimate(true);
+    setIndex((i) => (i >= total ? i : i + 1));
+  };
+
+  const prev = () => {
+    if (wrapping.current) return;
+    if (index === 0) {
+      wrapping.current = true;
+      setAnimate(false);
+      setIndex(total);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimate(true);
+          setIndex(total - 1);
+          wrapping.current = false;
+        });
+      });
+      return;
+    }
+    if (index >= total) return;
+    setAnimate(true);
+    setIndex((i) => i - 1);
+  };
+
+  const goTo = (target) => {
+    if (wrapping.current) return;
+    setAnimate(true);
+    setIndex(((target % total) + total) % total);
+  };
+
+  const snapLoop = () => {
+    if (index < total) return;
+    wrapping.current = true;
+    setAnimate(false);
+    setIndex(index % total);
+    requestAnimationFrame(() => {
+      wrapping.current = false;
+      requestAnimationFrame(() => setAnimate(true));
+    });
+  };
+
+  const handleTransitionEnd = (e) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.propertyName !== 'transform') return;
+    snapLoop();
+  };
+
+  // Sin transición (reduced motion), el loop debe saltar al instante
+  useEffect(() => {
+    if (!reduceMotion) return undefined;
+    if (index < total) return undefined;
+    snapLoop();
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo reacciona al índice fuera de rango
+  }, [index, total, reduceMotion]);
+
+  useEffect(() => {
+    if (paused || reduceMotion) return undefined;
+    const id = setInterval(() => {
+      if (wrapping.current) return;
+      setAnimate(true);
+      setIndex((i) => (i >= total ? i : i + 1));
+    }, AUTOPLAY_MS);
+    return () => clearInterval(id);
+  }, [paused, reduceMotion, total]);
+
+  useEffect(
+    () => () => {
+      if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    },
+    []
+  );
+
+  const onPointerDown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    pointerStartX.current = e.clientX;
+    dragDelta.current = 0;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (pointerStartX.current == null) return;
+    dragDelta.current = e.clientX - pointerStartX.current;
+  };
+
+  const onPointerUp = () => {
+    if (pointerStartX.current == null) return;
+    const delta = dragDelta.current;
+    pointerStartX.current = null;
+    if (Math.abs(delta) > 50) {
+      pauseTemporarily();
+      if (delta < 0) next();
+      else prev();
+    }
+  };
+
+  const activeDot = index % total;
+
+  const navBtnStyle = {
+    background: '#FFFFFF',
+    border: '1px solid #E5E7EB',
+    color: '#0A2A43',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+  };
+
+  return (
+    <div
+      style={{ overflowAnchor: 'none' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+      }}
+    >
+      {/* Viewport — mismo ancho que el grid anterior para conservar el tamaño de cards */}
+      <div
+        className="overflow-hidden py-2 -my-2"
+        style={{ touchAction: 'pan-y' }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <div
+          className="flex will-change-transform"
+          style={{
+            gap: gapPx,
+            transform: `translate3d(${xOffset}, 0, 0)`,
+            transition:
+              animate && !reduceMotion
+                ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)'
+                : 'none',
+          }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {slides.map((eje, i) => {
+            const realIndex = i % total;
+            return (
+              <div
+                key={`${realIndex}-${i}`}
+                className="shrink-0"
+                style={{
+                  width: slideWidth,
+                  // Espacio para el hover lift (-6px) sin recortar sombra
+                  paddingBottom: 8,
+                  paddingTop: 4,
+                }}
+              >
+                <EjeCard eje={eje} index={realIndex} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Controles: flechas + indicadores */}
+      <div className="mt-8 flex items-center justify-center gap-4 sm:gap-5">
+        <button
+          type="button"
+          aria-label="Eje anterior"
+          onClick={() => {
+            pauseTemporarily();
+            prev();
+          }}
+          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
+          style={navBtnStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#FF6200';
+            e.currentTarget.style.color = '#FF6200';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#E5E7EB';
+            e.currentTarget.style.color = '#0A2A43';
+          }}
+        >
+          <ChevronLeft size={20} strokeWidth={2} />
+        </button>
+
+        <div
+          className="flex items-center justify-center gap-2"
+          role="tablist"
+          aria-label="Ejes temáticos"
+        >
+          {items.map((eje, i) => (
+            <button
+              key={i}
+              type="button"
+              role="tab"
+              aria-selected={activeDot === i}
+              aria-label={`Ir al eje ${i + 1}: ${eje.title}`}
+              onClick={() => {
+                pauseTemporarily();
+                goTo(i);
+              }}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: activeDot === i ? 22 : 8,
+                height: 8,
+                background: activeDot === i ? eje.color : `${eje.color}40`,
+              }}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          aria-label="Eje siguiente"
+          onClick={() => {
+            pauseTemporarily();
+            next();
+          }}
+          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
+          style={navBtnStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#FF6200';
+            e.currentTarget.style.color = '#FF6200';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#E5E7EB';
+            e.currentTarget.style.color = '#0A2A43';
+          }}
+        >
+          <ChevronRight size={20} strokeWidth={2} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 // Componente EjesTematicos
 const EjesTematicos = () => (
   <section
@@ -240,12 +550,8 @@ const EjesTematicos = () => (
         </div>
       </div>
 
-      {/* Grid de ejes — gap más generoso */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-        {ejes.map((eje, i) => (
-          <EjeCard key={i} eje={eje} index={i} />
-        ))}
-      </div>
+      {/* Carrusel horizontal de ejes */}
+      <EjesCarousel items={ejes} />
 
       {/* CTA inferior */}
       <div className="mt-16 text-center">
@@ -253,7 +559,8 @@ const EjesTematicos = () => (
           ¿Tu investigación no encaja en estos ejes? Contáctanos para más información.
         </p>
         <a
-          href="https://eventonexus.com/login"
+          // TEMP: EventoNexus login deshabilitado — restaurar: https://eventonexus.com/login
+          href="#registro"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105"
           style={{
             background: '#FF6200',

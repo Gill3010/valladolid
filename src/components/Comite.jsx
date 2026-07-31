@@ -4,23 +4,26 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
-  Target,
-  BookOpen,
+  LayoutDashboard,
+  GraduationCap,
   Wallet,
-  Link2,
-  FlaskConical,
+  Handshake,
+  Award,
   Package,
   FileText,
   CalendarDays,
-  Shield,
-  Building,
-  PenTool,
-  Radio,
+  UserCheck,
+  Building2,
+  Newspaper,
+  MonitorPlay,
   Megaphone,
   Bus,
   Pause,
   Play,
 } from 'lucide-react';
+
+// Grosor uniforme para todos los íconos de área (Lucide).
+const ICON_STROKE = 1.75;
 
 import imgFranchiska from '../assets/comite/Franchiska.jpeg';
 import imgFrancisco from '../assets/comite/Francisco.jpeg';
@@ -49,7 +52,7 @@ const comiteOrganizadorGrupos = [
     categoria: 'Directores y Rectores',
     integrantes: [
       { nombre: 'Mtro. Héctor Daniel Aguilar Rivero', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
-      { nombre: 'Dr. Vicente A. Moreno', institucion: 'Universidad Nuestra Señora del Carmen', red: 'RELATIC', image: imgVicente, orcid: '0009-0007-7922-7548' },
+      { nombre: 'Dr. Vicente A. Moreno', institucion: 'Universidad Nuestra Señora del Carmen, Panamá', red: 'RELATIC', image: imgVicente, orcid: '0009-0007-7922-7548' },
       { nombre: 'Dr. Manuel Villero P.', institucion: 'University of Technology and Education, EEUU', red: 'RELATIC', orcid: '0000-0003-0347-2129' },
     ],
   },
@@ -86,8 +89,7 @@ const comiteOrganizadorGrupos = [
       { nombre: 'ITESCAM', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Dra. Isabel Menacho Vargas', institucion: 'UNMSM la Decana de América', red: 'RELATIC', image: imgIsabel, orcid: '0000-0001-6246-4618' },
       { nombre: 'Dr. Jesús Antonio Santos Tejero', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA', image: imgAntonio, orcid: '0000-0002-9482-8225' },
-      // Fabiola Colmenares — posición reservada; completar institución/ORCID cuando se confirmen los datos.
-      { nombre: 'Dra. Fabiola Colmenares', institucion: '', red: 'RELATIC', image: imgFabiola },
+      { nombre: 'Dra. Fabiola Colmenero Fonseca', institucion: 'Universidad Europea de Madrid', red: 'RELATIC', image: imgFabiola, orcid: '0000-0003-1901-2725' },
     ],
   },
   {
@@ -126,7 +128,7 @@ const comiteOrganizadorGrupos = [
     integrantes: [
       { nombre: 'Dra. Livia Esthela Diaz González', institucion: 'University of Technology and Education, EEUU', red: 'RELATIC', image: imgLivia, orcid: '0000-0002-2045-4443' },
       { nombre: 'Dra. Mónica Contreras', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgMonica, orcid: '0000-0003-0972-6951' },
-      { nombre: 'Coulette C. Andrews T.', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgCoulette, orcid: '0000-0002-7708-4594' },
+      { nombre: 'Dra. Coulette C. Andrews T.', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgCoulette, orcid: '0000-0002-7708-4594' },
       { nombre: 'Dra. Keyla Urbina', institucion: 'Universidad Latina, Panamá', red: 'RELATIC', image: imgKeyla, orcid: '0000-0003-3594-7010' },
       { nombre: 'Dra. Aymara Pacheco', institucion: 'Universidad de Santander', red: 'RELATIC', orcid: '0000-0003-2859-7817' },
       { nombre: 'M. Sc. Zenaida Fossatti', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgZenaida, orcid: '0009-0008-6717-3930' },
@@ -210,24 +212,24 @@ const comiteData = {
 };
 
 const redColor = {
-  ITSVA: { bg: 'rgba(255,98,0,0.12)', border: '#FF6200', text: '#FF6200' },
-  RELATIC: { bg: 'rgba(0,122,255,0.12)', border: '#007AFF', text: '#007AFF' },
+  ITSVA: { bg: 'rgba(255,98,0,0.12)', border: '#FF6200', text: '#FF6200', label: 'ITSVA' },
+  RELATIC: { bg: 'rgba(0,122,255,0.12)', border: '#007AFF', text: '#007AFF', label: 'RELATIC Panamá' },
 };
 
 const categoriaVisual = {
   'Directores y Rectores': { icon: Crown, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
-  'Coordinación General': { icon: Target, color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
-  Académico: { icon: BookOpen, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
+  'Coordinación General': { icon: LayoutDashboard, color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
+  Académico: { icon: GraduationCap, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
   Finanzas: { icon: Wallet, color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
-  Vinculación: { icon: Link2, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
-  Científico: { icon: FlaskConical, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
+  Vinculación: { icon: Handshake, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
+  Científico: { icon: Award, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
   Logística: { icon: Package, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
   Secretaría: { icon: FileText, color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
   Programa: { icon: CalendarDays, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
-  Protocolo: { icon: Shield, color: '#2C0055', bg: 'rgba(44,0,85,0.08)' },
-  'Infraestructura y Servicios': { icon: Building, color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
-  Editorial: { icon: PenTool, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
-  'Técnico Transmisiones': { icon: Radio, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
+  Protocolo: { icon: UserCheck, color: '#2C0055', bg: 'rgba(44,0,85,0.08)' },
+  'Infraestructura y Servicios': { icon: Building2, color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
+  Editorial: { icon: Newspaper, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
+  'Técnico Transmisiones': { icon: MonitorPlay, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
   'Difusión y Constancias': { icon: Megaphone, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
   'Transporte y Hospedaje': { icon: Bus, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
 };
@@ -345,7 +347,7 @@ const PersonPortrait = ({ persona, cargoColor, photoClass, delay = 0 }) => {
               border: `1px solid ${red.border}45`,
             }}
           >
-            {persona.red}
+            {red.label || persona.red}
           </span>
         )}
         {!isItsva && persona.orcid && (
@@ -384,7 +386,7 @@ const EmptyAreaCard = ({ visual }) => {
           boxShadow: `0 8px 28px ${visual.color}30`,
         }}
       >
-        <Icon size={36} style={{ color: visual.color, opacity: 0.65 }} />
+        <Icon size={36} strokeWidth={ICON_STROKE} style={{ color: visual.color, opacity: 0.65 }} />
       </div>
       <p className="text-lg font-bold italic mb-1" style={{ color: '#6B7280' }}>
         Por asignar
@@ -433,7 +435,7 @@ const AreaStage = ({ group, direction, reduceMotion = false }) => {
               boxShadow: `0 8px 24px ${visual.color}22`,
             }}
           >
-            <Icon size={24} style={{ color: visual.color }} aria-hidden="true" />
+            <Icon size={24} strokeWidth={ICON_STROKE} style={{ color: visual.color }} aria-hidden="true" />
           </div>
           <div className="min-w-0">
             <p
@@ -534,12 +536,20 @@ const AreaCarousel3D = ({ groups }) => {
     return () => clearInterval(id);
   }, [paused, reduceMotion, total]);
 
+  // Solo desplaza el contenedor horizontal de chips — nunca la página
+  // (scrollIntoView provocaba saltos de scroll al autoplay).
   useEffect(() => {
     const chip = chipRefs.current[index];
-    if (chip && chipScroller.current) {
-      chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-  }, [index]);
+    const scroller = chipScroller.current;
+    if (!chip || !scroller) return;
+
+    const target =
+      chip.offsetLeft - scroller.clientWidth / 2 + chip.offsetWidth / 2;
+    scroller.scrollTo({
+      left: Math.max(0, target),
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    });
+  }, [index, reduceMotion]);
 
   useEffect(
     () => () => {
@@ -573,6 +583,7 @@ const AreaCarousel3D = ({ groups }) => {
 
   return (
     <div
+      style={{ overflowAnchor: 'none' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -613,7 +624,7 @@ const AreaCarousel3D = ({ groups }) => {
                 boxShadow: active ? `0 6px 18px ${gVisual.color}40` : 'none',
               }}
             >
-              <GIcon size={14} aria-hidden="true" />
+              <GIcon size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
               {g.categoria}
               <span
                 className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
@@ -779,7 +790,7 @@ const Comite = () => {
     <section
       id="comite"
       className="py-20 sm:py-28 relative overflow-hidden"
-      style={{ background: '#F8F9FA' }}
+      style={{ background: '#F8F9FA', overflowAnchor: 'none' }}
     >
       <div
         className="absolute -top-24 right-0 w-[28rem] h-[28rem] rounded-full opacity-[0.04] blur-3xl pointer-events-none"
@@ -824,6 +835,7 @@ const Comite = () => {
       </div>
     </section>
   );
+  
 };
 
 export default Comite;

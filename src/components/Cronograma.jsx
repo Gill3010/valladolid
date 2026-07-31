@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Clock, Mic, Coffee, BookOpen, Award, Users, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Clock, Mic, Coffee, BookOpen, Award, Users } from 'lucide-react';
 
 // Datos del cronograma por día
 const schedule = {
   '7 Oct': [
-    { time: '08:00', title: 'Conferencia Magistral de Apertura: Inteligencia Artificial y planeación docente: Riesgos y Desafíos', speaker: 'Dr. Antonio Jesús Santos — ITSVA', icon: Mic, type: 'keynote' },
-    { time: '09:00', title: 'Registro y Ceremonia de Inauguración', speaker: 'Dr. Carlos Méndez Ríos — Rector ITSVA', icon: Award, type: 'ceremony' },
+    { time: '08:00', title: 'Registro y Ceremonia de Inauguración', speaker: 'Dr. Carlos Méndez Ríos — Rector ITSVA', icon: Award, type: 'ceremony' },
+    { time: '09:00', title: 'Conferencia Magistral de Apertura: Inteligencia Artificial y planeación docente: Riesgos y Desafíos', speaker: 'Dr. Antonio Jesús Santos — ITSVA', icon: Mic, type: 'keynote' },
     { time: '10:00', title: 'Panel: Redes Académicas en América Latina', speaker: 'Dr. Jorge Ramírez & Dra. Sofía Pérez', icon: Users, type: 'panel' },
     { time: '11:00', title: 'Receso / Café', speaker: '', icon: Coffee, type: 'break' },
     { time: '11:30', title: 'Conferencia Magistral: Investigación cualitativa en clave de inteligencia artificial: retos éticos, epistemológicos y pedagógicos en educación latinoamericana', speaker: 'Dr. Carlos Viltre — Centro Latinoamericano de Estudios en Epistemología Pedagógica', icon: Mic, type: 'keynote' },
@@ -52,18 +53,180 @@ const typeStyles = {
   social: { bg: 'rgba(244,168,0,0.07)', border: '#F4A800', dot: '#F4A800', label: 'Social' },
 };
 
-// Etiquetas textuales para los tabs con fecha completa
 const dayLabels = {
   '7 Oct': { short: '7 Oct', full: 'Miércoles 7', date: 'Octubre 2026' },
   '8 Oct': { short: '8 Oct', full: 'Jueves 8', date: 'Octubre 2026' },
   '9 Oct': { short: '9 Oct', full: 'Viernes 9', date: 'Octubre 2026' },
 };
 
+const legendItems = [
+  { label: 'Conferencia magistral', color: '#007AFF' },
+  { label: 'Taller', color: '#F4A800' },
+  { label: 'Panel / Mesa', color: '#9B59B6' },
+  { label: 'Ponencia', color: '#0002E9' },
+  { label: 'Ceremonia', color: '#FF6200' },
+];
+
 const days = Object.keys(schedule);
 
-// Componente Cronograma con tabs por día
+const timeToMinutes = (time) => {
+  const [h, m] = time.split(':').map(Number);
+  return h * 60 + m;
+};
+
+// Agrupa en mañana / tarde para escanear sin alargar el scroll.
+const groupByBlock = (items) => {
+  const morning = [];
+  const afternoon = [];
+  for (const item of items) {
+    if (timeToMinutes(item.time) < 13 * 60) morning.push(item);
+    else afternoon.push(item);
+  }
+  return [
+    { id: 'manana', label: 'Mañana', items: morning },
+    { id: 'tarde', label: 'Tarde', items: afternoon },
+  ].filter((block) => block.items.length > 0);
+};
+
+const BreakRow = ({ item }) => {
+  const Icon = item.icon;
+  return (
+    <div
+      className="flex items-center gap-3 px-3 sm:px-4 py-2 rounded-xl"
+      style={{ background: '#F8F9FA', border: '1px dashed #E5E7EB' }}
+    >
+      <span
+        className="text-xs font-bold tabular-nums shrink-0"
+        style={{ color: '#9CA3AF', minWidth: '2.75rem' }}
+      >
+        {item.time}
+      </span>
+      <Icon size={14} style={{ color: '#9CA3AF' }} aria-hidden="true" />
+      <p className="text-xs sm:text-sm font-medium" style={{ color: '#6B7280' }}>
+        {item.title}
+      </p>
+    </div>
+  );
+};
+
+const ActivityRow = ({ item, index }) => {
+  const Icon = item.icon;
+  const style = typeStyles[item.type] || typeStyles.break;
+
+  if (item.type === 'break') {
+    return <BreakRow item={item} />;
+  }
+
+  return (
+    <article
+      className="group relative flex gap-3 sm:gap-4 rounded-xl px-3 sm:px-4 py-3 transition-all duration-200"
+      style={{
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
+        borderLeft: `3px solid ${style.border}`,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = style.bg;
+        e.currentTarget.style.borderColor = `${style.border}45`;
+        e.currentTarget.style.boxShadow = `0 6px 16px ${style.dot}14`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = '#FFFFFF';
+        e.currentTarget.style.borderColor = '#E5E7EB';
+        e.currentTarget.style.borderLeftColor = style.border;
+        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03)';
+      }}
+    >
+      {/* Hora */}
+      <div className="shrink-0 flex flex-col items-center pt-0.5" style={{ minWidth: '3.25rem' }}>
+        <span
+          className="text-sm font-black tabular-nums leading-none"
+          style={{ color: style.dot }}
+        >
+          {item.time}
+        </span>
+        <Clock size={11} className="mt-1.5 opacity-50" style={{ color: style.dot }} aria-hidden="true" />
+      </div>
+
+      {/* Contenido */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <span
+            className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+            style={{
+              background: `${style.dot}12`,
+              color: style.dot,
+              border: `1px solid ${style.dot}25`,
+            }}
+          >
+            <Icon size={10} aria-hidden="true" />
+            {style.label}
+          </span>
+          <span className="text-[10px] font-semibold tabular-nums" style={{ color: '#D1D5DB' }}>
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
+        <h4
+          className="font-bold text-sm sm:text-[15px] leading-snug"
+          style={{ color: '#0A2A43' }}
+        >
+          {item.title}
+        </h4>
+        {item.speaker ? (
+          <p className="mt-1 text-xs sm:text-[13px] leading-snug" style={{ color: '#4B5563' }}>
+            {item.speaker}
+          </p>
+        ) : null}
+      </div>
+    </article>
+  );
+};
+
+const DayAgenda = ({ dayKey }) => {
+  const items = schedule[dayKey];
+  const blocks = groupByBlock(items);
+  let runningIndex = 0;
+
+  return (
+    <motion.div
+      key={dayKey}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.28, ease: 'easeOut' }}
+      className="space-y-6"
+    >
+      {blocks.map((block) => (
+        <div key={block.id}>
+          <div className="flex items-center gap-3 mb-3">
+            <span
+              className="text-[11px] font-bold uppercase tracking-[0.16em]"
+              style={{ color: '#FF6200' }}
+            >
+              {block.label}
+            </span>
+            <div className="h-px flex-1" style={{ background: '#E5E7EB' }} />
+            <span className="text-[11px] font-semibold" style={{ color: '#9CA3AF' }}>
+              {block.items.length} {block.items.length === 1 ? 'actividad' : 'actividades'}
+            </span>
+          </div>
+          <div className="space-y-2">
+            {block.items.map((item) => {
+              const idx = runningIndex;
+              runningIndex += 1;
+              return <ActivityRow key={`${dayKey}-${item.time}-${item.title}`} item={item} index={idx} />;
+            })}
+          </div>
+        </div>
+      ))}
+    </motion.div>
+  );
+};
+
 const Cronograma = () => {
   const [activeDay, setActiveDay] = useState(days[0]);
+  const activeLabel = dayLabels[activeDay];
 
   return (
     <section
@@ -71,18 +234,24 @@ const Cronograma = () => {
       className="py-20 sm:py-28 relative overflow-hidden"
       style={{ background: '#FFFFFF' }}
     >
-      {/* Decoración sutil */}
       <div
         className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
         style={{ background: '#007AFF' }}
       />
+      <div
+        className="absolute bottom-10 left-0 w-72 h-72 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        style={{ background: '#F4A800' }}
+      />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Encabezado */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 sm:mb-12">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-5"
-            style={{ background: 'rgba(244,168,0,0.1)', color: '#F4A800', border: '1px solid rgba(244,168,0,0.3)' }}
+            style={{
+              background: 'rgba(244,168,0,0.1)',
+              color: '#F4A800',
+              border: '1px solid rgba(244,168,0,0.3)',
+            }}
           >
             Programa Académico
           </span>
@@ -92,15 +261,21 @@ const Cronograma = () => {
           >
             Cronograma de Actividades
           </h2>
-          <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: '#4B5563' }}>
-            Tres días de conferencias magistrales, talleres, ponencias y experiencias culturales en Valladolid, Yucatán.
+          <p
+            className="mt-6 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto"
+            style={{ color: '#4B5563' }}
+          >
+            Tres días de conferencias magistrales, talleres, ponencias y experiencias culturales en
+            Valladolid, Yucatán.
           </p>
         </div>
 
-        {/* Tabs de días — rediseñados con más presencia */}
+        {/* Tabs de días */}
         <div
-          className="flex rounded-2xl p-1.5 mb-12 gap-1.5"
+          className="flex rounded-2xl p-1.5 mb-6 gap-1.5"
           style={{ background: '#F8F9FA', border: '1px solid #E5E7EB' }}
+          role="tablist"
+          aria-label="Días del programa"
         >
           {days.map((day) => {
             const label = dayLabels[day];
@@ -108,23 +283,20 @@ const Cronograma = () => {
             return (
               <button
                 key={day}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveDay(day)}
-                className="flex-1 py-3.5 sm:py-4 px-3 sm:px-5 rounded-xl font-bold transition-all duration-300"
+                className="flex-1 py-3 sm:py-3.5 px-2 sm:px-4 rounded-xl font-bold transition-all duration-300"
                 style={
                   isActive
                     ? {
-                      background: '#FF6200',
-                      color: 'white',
-                      boxShadow: '0 4px 14px rgba(255,98,0,0.3)',
-                    }
+                        background: '#FF6200',
+                        color: 'white',
+                        boxShadow: '0 4px 14px rgba(255,98,0,0.3)',
+                      }
                     : { color: '#4B5563' }
                 }
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = '#0A2A43';
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.color = '#4B5563';
-                }}
               >
                 <span className="block text-sm sm:text-base font-bold">{label.full}</span>
                 <span
@@ -138,129 +310,64 @@ const Cronograma = () => {
           })}
         </div>
 
-        {/* Contador de actividades del día */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="h-px flex-1" style={{ background: '#E5E7EB' }} />
-          <span className="text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full"
-            style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#4B5563' }}
-          >
-            {schedule[activeDay].length} actividades programadas
-          </span>
-          <div className="h-px flex-1" style={{ background: '#E5E7EB' }} />
-        </div>
-
-        {/* Timeline del día activo */}
-        <div className="relative">
-          {/* Línea vertical del timeline */}
+        {/* Escenario del día — compacto, coherente con Comité */}
+        <div
+          className="rounded-3xl overflow-hidden"
+          style={{
+            background: `
+              radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,98,0,0.06) 0%, transparent 55%),
+              linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%)
+            `,
+            border: '1px solid rgba(255,98,0,0.18)',
+            boxShadow: '0 16px 48px rgba(10,42,67,0.06)',
+          }}
+        >
           <div
-            className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5"
-            style={{ background: 'linear-gradient(180deg, #FF6200, #F4A800 50%, #E5E7EB)' }}
-          />
+            className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4"
+            style={{ borderBottom: '1px solid #E5E7EB' }}
+          >
+            <div className="min-w-0">
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.16em]"
+                style={{ color: '#FF6200' }}
+              >
+                Agenda del día
+              </p>
+              <h3
+                className="text-lg sm:text-xl font-black truncate"
+                style={{ color: '#0A2A43' }}
+              >
+                {activeLabel.full} · {activeLabel.date}
+              </h3>
+            </div>
+            <span
+              className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-full"
+              style={{
+                background: 'rgba(255,98,0,0.08)',
+                color: '#FF6200',
+                border: '1px solid rgba(255,98,0,0.25)',
+              }}
+            >
+              {schedule[activeDay].length} actividades
+            </span>
+          </div>
 
-          <div className="space-y-4">
-            {schedule[activeDay].map((item, index) => {
-              const Icon = item.icon;
-              const style = typeStyles[item.type] || typeStyles.break;
-              return (
-                <div
-                  key={index}
-                  className="relative flex items-start gap-4 sm:gap-6 pl-14 sm:pl-20 group"
-                >
-                  {/* Dot del timeline */}
-                  <div
-                    className="absolute left-3.5 sm:left-5.5 top-5 w-6 h-6 rounded-full flex items-center justify-center z-10 transition-transform duration-200 group-hover:scale-110"
-                    style={{
-                      background: style.dot,
-                      boxShadow: `0 0 10px ${style.dot}50`,
-                    }}
-                  >
-                    <div className="w-2.5 h-2.5 rounded-full bg-white opacity-80" />
-                  </div>
-
-                  {/* Card */}
-                  <div
-                    className="flex-1 p-5 sm:p-6 rounded-xl transition-all duration-300 group-hover:shadow-md"
-                    style={{
-                      background: style.bg,
-                      border: `1px solid ${style.border}30`,
-                      borderLeft: `3px solid ${style.border}`,
-                    }}
-                  >
-                    {/* Fila superior: hora + badge de tipo */}
-                    <div className="flex items-center gap-3 mb-3 flex-wrap">
-                      {/* Hora */}
-                      <div
-                        className="flex-shrink-0 flex items-center gap-2 px-3.5 py-1.5 rounded-lg"
-                        style={{ background: '#FFFFFF', border: '1px solid #E5E7EB' }}
-                      >
-                        <Clock size={14} style={{ color: style.dot }} />
-                        <span
-                          className="text-sm font-bold tabular-nums"
-                          style={{ color: style.dot }}
-                        >
-                          {item.time}
-                        </span>
-                      </div>
-                      {/* Badge de tipo */}
-                      <span
-                        className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
-                        style={{
-                          background: `${style.dot}12`,
-                          color: style.dot,
-                          border: `1px solid ${style.dot}25`,
-                        }}
-                      >
-                        {style.label}
-                      </span>
-                    </div>
-
-                    {/* Contenido principal */}
-                    <div className="flex items-start gap-3">
-                      <Icon
-                        size={18}
-                        className="mt-0.5 shrink-0"
-                        style={{ color: style.dot }}
-                      />
-                      <div className="min-w-0 flex-1">
-                        <h4
-                          className="font-bold text-sm sm:text-base leading-snug mb-1"
-                          style={{ color: '#0A2A43' }}
-                        >
-                          {item.title}
-                        </h4>
-                        {item.speaker && (
-                          <p
-                            className="text-xs sm:text-sm leading-relaxed flex items-center gap-1.5"
-                            style={{ color: '#4B5563' }}
-                          >
-                            <ChevronRight size={12} style={{ color: style.dot, opacity: 0.6, flexShrink: 0 }} />
-                            {item.speaker}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="px-3 sm:px-5 lg:px-6 py-5 sm:py-6" role="tabpanel" aria-label={activeLabel.full}>
+            <AnimatePresence mode="wait" initial={false}>
+              <DayAgenda dayKey={activeDay} />
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Leyenda */}
-        <div className="mt-12 flex flex-wrap gap-3 justify-center">
-          {[
-            { label: 'Conferencia magistral', color: '#007AFF' },
-            { label: 'Taller', color: '#F4A800' },
-            { label: 'Panel / Mesa', color: '#9B59B6' },
-            { label: 'Ponencia', color: '#0002E9' },
-            { label: 'Ceremonia', color: '#FF6200' },
-          ].map((l) => (
+        {/* Leyenda compacta */}
+        <div className="mt-8 flex flex-wrap gap-2 justify-center">
+          {legendItems.map((l) => (
             <span
               key={l.label}
-              className="flex items-center gap-2 text-xs sm:text-sm px-3.5 py-2 rounded-full font-medium"
-              style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#1F2937' }}
+              className="flex items-center gap-1.5 text-[11px] sm:text-xs px-2.5 py-1.5 rounded-full font-medium"
+              style={{ background: '#F8F9FA', border: '1px solid #E5E7EB', color: '#374151' }}
             >
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: l.color }} />
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: l.color }} />
               {l.label}
             </span>
           ))}

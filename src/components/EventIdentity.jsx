@@ -167,9 +167,8 @@ const EventIdentity = () => {
 
             {/* CTA — coherente con el navbar */}
             <a
-              href="https://eventonexus.com/login"
-              target="_blank"
-              rel="noopener noreferrer"
+              // TEMP: EventoNexus login deshabilitado — restaurar: https://eventonexus.com/login (+ target="_blank" rel="noopener noreferrer")
+              href="#registro"
               className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm sm:text-base font-bold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: '#FF6200',

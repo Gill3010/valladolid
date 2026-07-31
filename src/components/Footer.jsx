@@ -90,7 +90,8 @@ const Footer = () => (
               { label: 'Ejes Temáticos', href: '#ejes' },
               { label: 'Costos', href: '#costos' },
               { label: 'Publicaciones', href: '#publicaciones' },
-              { label: 'Regístrate', href: 'https://eventonexus.com/login' },
+              // TEMP: EventoNexus login deshabilitado — restaurar: 'https://eventonexus.com/login'
+              { label: 'Regístrate', href: '#registro' },
             ].map((l) => (
               <li key={l.label}>
                 <a
