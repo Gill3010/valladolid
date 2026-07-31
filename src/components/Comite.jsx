@@ -1,6 +1,8 @@
-import { useState, Fragment } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Crown,
   Target,
   BookOpen,
@@ -16,23 +18,26 @@ import {
   Radio,
   Megaphone,
   Bus,
+  Pause,
+  Play,
 } from 'lucide-react';
 
 import imgFranchiska from '../assets/comite/Franchiska.jpeg';
-import imgAntonio from '../assets/comite/Antonio.jpg';
 import imgFrancisco from '../assets/comite/Francisco.jpeg';
 import imgKelis from '../assets/comite/Kelis.jpeg';
 import imgMonica from '../assets/comite/Monica.jpeg';
 import imgKeyla from '../assets/comite/Keyla.jpg';
 import imgEmely from '../assets/comite/Emely.png';
 import imgIsabel from '../assets/comite/Isabel.png';
-import imgNaivi from '../assets/comite/Naivi.png';
 import imgLivia from '../assets/comite/Livia.jpeg';
 import imgTania from '../assets/comite/Tania.jpeg';
 import imgIsrael from '../assets/comite/Is.jpeg';
 import imgCoulette from '../assets/editors/Coulette.jpeg';
 import imgZenaida from '../assets/comite/Zenaida.jpeg';
 import imgVicente from '../assets/comite/Vicente.jpeg';
+import logoItsva from '../assets/logos/logo-itsva.jpeg';
+import imgAntonio from '../assets/comite/Antonio.jpg';
+import imgFabiola from '../assets/comite/Fabiola.jpeg';
 
 // Comité Organizador jerárquico por área (orden fijo, no alfabético).
 // "institucion" = universidad/afiliación real (cuando se conoce). "red" = a qué
@@ -56,10 +61,10 @@ const comiteOrganizadorGrupos = [
     ],
   },
   {
-    categoria: 'Gestión Académica',
+    categoria: 'Académico',
     integrantes: [
-      { nombre: 'Mtra. María Marena López García', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Magister Franchiska Kamani Ávila', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgFranchiska, orcid: '0009-0005-6793-6158' },
+      { nombre: 'Lic. Kelis Paola Montes Manjarrés', institucion: 'University of Technology and Education, EEUU', red: 'RELATIC', image: imgKelis, orcid: '0009-0004-4495-8402' },
     ],
   },
   {
@@ -80,7 +85,9 @@ const comiteOrganizadorGrupos = [
     integrantes: [
       { nombre: 'ITESCAM', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Dra. Isabel Menacho Vargas', institucion: 'UNMSM la Decana de América', red: 'RELATIC', image: imgIsabel, orcid: '0000-0001-6246-4618' },
-      { nombre: 'Dra. Aymara', institucion: '', red: 'RELATIC' },
+      { nombre: 'Dr. Jesús Antonio Santos Tejero', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA', image: imgAntonio, orcid: '0000-0002-9482-8225' },
+      // Fabiola Colmenares — posición reservada; completar institución/ORCID cuando se confirmen los datos.
+      { nombre: 'Dra. Fabiola Colmenares', institucion: '', red: 'RELATIC', image: imgFabiola },
     ],
   },
   {
@@ -96,16 +103,15 @@ const comiteOrganizadorGrupos = [
   {
     categoria: 'Programa',
     integrantes: [
-      { nombre: 'Dra. Naivi Raquel Aguilar Mena', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA', image: imgNaivi },
+      { nombre: 'Dra. Naivi Raquel Aguilar Mena', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Dra. Keyla Urbina', institucion: 'Universidad Latina, Panamá', red: 'RELATIC', image: imgKeyla, orcid: '0000-0003-3594-7010' },
     ],
   },
   {
     categoria: 'Protocolo',
     integrantes: [
-      { nombre: 'Mtra. Lucia Martínez', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
-      { nombre: 'Lic. Gema Gabriela', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Lic. Kelis Paola Montes Manjarrés', institucion: 'University of Technology and Education, EEUU', red: 'RELATIC', image: imgKelis, orcid: '0009-0004-4495-8402' },
+      { nombre: 'M.Sc. Emely Saa', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgEmely, orcid: '0009-0003-1066-2366' },
     ],
   },
   {
@@ -118,12 +124,12 @@ const comiteOrganizadorGrupos = [
   {
     categoria: 'Editorial',
     integrantes: [
-      { nombre: 'Dr. Jesús Antonio Santos Tejero', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA', image: imgAntonio, orcid: '0000-0002-9482-8225' },
-      { nombre: 'Dra. Cindy Vianely Cetina Aguilar', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
-      { nombre: 'Lic. Zazil Monserrat May Poot', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Dra. Livia Esthela Diaz González', institucion: 'University of Technology and Education, EEUU', red: 'RELATIC', image: imgLivia, orcid: '0000-0002-2045-4443' },
       { nombre: 'Dra. Mónica Contreras', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgMonica, orcid: '0000-0003-0972-6951' },
       { nombre: 'Coulette C. Andrews T.', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgCoulette, orcid: '0000-0002-7708-4594' },
+      { nombre: 'Dra. Keyla Urbina', institucion: 'Universidad Latina, Panamá', red: 'RELATIC', image: imgKeyla, orcid: '0000-0003-3594-7010' },
+      { nombre: 'Dra. Aymara Pacheco', institucion: 'Universidad de Santander', red: 'RELATIC', orcid: '0000-0003-2859-7817' },
+      { nombre: 'M. Sc. Zenaida Fossatti', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgZenaida, orcid: '0009-0008-6717-3930' },
     ],
   },
   {
@@ -203,459 +209,618 @@ const comiteData = {
   'Comité Organizador': comiteOrganizadorGrupos,
 };
 
-const categories = Object.keys(comiteData);
-
-// Color de badge por categoría
-const categoryColor = {
-  'Comité Honorífico': { bg: 'rgba(244,168,0,0.1)', border: '#F4A800', text: '#F4A800' },
-  'Comité Científico': { bg: 'rgba(0,122,255,0.08)', border: '#007AFF', text: '#007AFF' },
-  'Comité Organizador': { bg: 'rgba(255,98,0,0.08)', border: '#FF6200', text: '#FF6200' },
-};
-
-// Color de badge por red/afiliación institucional (ITSVA vs RELATIC).
-// "red" indica a qué organización pertenece la persona; "institucion" es su
-// universidad/afiliación real cuando se conoce — son datos independientes.
 const redColor = {
-  ITSVA: { bg: 'rgba(255,98,0,0.08)', border: '#FF6200', text: '#FF6200' },
-  RELATIC: { bg: 'rgba(0,122,255,0.08)', border: '#007AFF', text: '#007AFF' },
+  ITSVA: { bg: 'rgba(255,98,0,0.12)', border: '#FF6200', text: '#FF6200' },
+  RELATIC: { bg: 'rgba(0,122,255,0.12)', border: '#007AFF', text: '#007AFF' },
 };
 
-// ─── Sistema de colores e iconos por categoría del comité ───
-// Cada grupo tiene un color, un icono y un fondo semitransparente único para
-// diferenciarlo visualmente de los demás de manera inmediata.
 const categoriaVisual = {
-  'Directores y Rectores': { icon: Crown, color: '#FF6200', bg: 'rgba(255,98,0,0.06)' },
-  'Coordinación General': { icon: Target, color: '#007AFF', bg: 'rgba(0,122,255,0.06)' },
-  'Gestión Académica': { icon: BookOpen, color: '#F4A800', bg: 'rgba(244,168,0,0.06)' },
-  'Finanzas': { icon: Wallet, color: '#22c55e', bg: 'rgba(34,197,94,0.06)' },
-  'Vinculación': { icon: Link2, color: '#9B59B6', bg: 'rgba(155,89,182,0.06)' },
-  'Científico': { icon: FlaskConical, color: '#0002E9', bg: 'rgba(0,2,233,0.06)' },
-  'Logística': { icon: Package, color: '#F4A800', bg: 'rgba(244,168,0,0.06)' },
-  'Secretaría': { icon: FileText, color: '#007AFF', bg: 'rgba(0,122,255,0.06)' },
-  'Programa': { icon: CalendarDays, color: '#FF6200', bg: 'rgba(255,98,0,0.06)' },
-  'Protocolo': { icon: Shield, color: '#2C0055', bg: 'rgba(44,0,85,0.06)' },
-  'Infraestructura y Servicios': { icon: Building, color: '#22c55e', bg: 'rgba(34,197,94,0.06)' },
-  'Editorial': { icon: PenTool, color: '#0002E9', bg: 'rgba(0,2,233,0.06)' },
-  'Técnico Transmisiones': { icon: Radio, color: '#9B59B6', bg: 'rgba(155,89,182,0.06)' },
-  'Difusión y Constancias': { icon: Megaphone, color: '#FF6200', bg: 'rgba(255,98,0,0.06)' },
-  'Transporte y Hospedaje': { icon: Bus, color: '#F4A800', bg: 'rgba(244,168,0,0.06)' },
+  'Directores y Rectores': { icon: Crown, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
+  'Coordinación General': { icon: Target, color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
+  Académico: { icon: BookOpen, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
+  Finanzas: { icon: Wallet, color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
+  Vinculación: { icon: Link2, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
+  Científico: { icon: FlaskConical, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
+  Logística: { icon: Package, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
+  Secretaría: { icon: FileText, color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
+  Programa: { icon: CalendarDays, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
+  Protocolo: { icon: Shield, color: '#2C0055', bg: 'rgba(44,0,85,0.08)' },
+  'Infraestructura y Servicios': { icon: Building, color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
+  Editorial: { icon: PenTool, color: '#0002E9', bg: 'rgba(0,2,233,0.08)' },
+  'Técnico Transmisiones': { icon: Radio, color: '#9B59B6', bg: 'rgba(155,89,182,0.08)' },
+  'Difusión y Constancias': { icon: Megaphone, color: '#FF6200', bg: 'rgba(255,98,0,0.08)' },
+  'Transporte y Hospedaje': { icon: Bus, color: '#F4A800', bg: 'rgba(244,168,0,0.08)' },
 };
 
-const isGroupedCommittee = (data) =>
-  Array.isArray(data) && data.length > 0 && Array.isArray(data[0]?.integrantes);
+const FALLBACK_VISUAL = { icon: FileText, color: '#6B7280', bg: 'rgba(107,114,128,0.08)' };
+const AUTOPLAY_MS = 6500;
 
-const getMemberCount = (data) =>
-  isGroupedCommittee(data)
-    ? data.reduce((total, group) => total + group.integrantes.length, 0)
-    : data.length;
+const ITSVA_DISPLAY_NAME = 'Representante de ITSVA';
 
-const getIntegrantePhoto = (persona) =>
-  persona.image || `https://picsum.photos/seed/${encodeURIComponent(persona.nombre)}/200/200`;
+const isItsvaMember = (persona) => persona.red === 'ITSVA' && !persona.image;
 
-const MemberCard = ({ member, category }) => {
-  const colors = categoryColor[category];
+const getIntegranteDisplayName = (persona) =>
+  isItsvaMember(persona) ? ITSVA_DISPLAY_NAME : persona.nombre;
+
+const getIntegrantePhoto = (persona) => {
+  if (isItsvaMember(persona)) return logoItsva;
+  return persona.image || `https://picsum.photos/seed/${encodeURIComponent(persona.nombre)}/320/320`;
+};
+
+const comiteGrupos = comiteData['Comité Organizador'];
+
+const totalMiembros = comiteGrupos.reduce((n, g) => n + g.integrantes.length, 0);
+
+const OrcidIcon = ({ size = 13 }) => (
+  <svg width={size} height={size} viewBox="0 0 256 256" fill="none" aria-hidden="true">
+    <path
+      d="M128 256C198.7 256 256 198.7 256 128C256 57.3 198.7 0 128 0C57.3 0 0 57.3 0 128C0 198.7 57.3 256 128 256Z"
+      fill="#A6CE39"
+    />
+    <path d="M86.3 186.2H70.9V79.1H86.3V186.2Z" fill="#FFF" />
+    <path
+      d="M108.9 79.1H155.3C178.2 79.1 193.3 93.2 193.3 113.6C193.3 134.3 177.8 148.3 155 148.3H124.3V186.2H108.9V79.1ZM124.3 134.3H153.2C168.9 134.3 177.8 125.8 177.8 113.6C177.8 101.1 168.9 93.1 153.2 93.1H124.3V134.3Z"
+      fill="#FFF"
+    />
+    <path
+      d="M78.6 65.2C83.8 65.2 88.1 60.9 88.1 55.7C88.1 50.5 83.8 46.2 78.6 46.2C73.4 46.2 69.1 50.5 69.1 55.7C69.1 60.9 73.4 65.2 78.6 65.2Z"
+      fill="#FFF"
+    />
+  </svg>
+);
+
+// Tamaño de foto según cuántas personas hay en el área (1 = enorme, 6 = aún legible).
+const photoSizeForCount = (count) => {
+  if (count <= 1) return 'w-44 h-44 sm:w-52 sm:h-52 lg:w-56 lg:h-56';
+  if (count === 2) return 'w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48';
+  if (count === 3) return 'w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44';
+  // 4, 5 y 6: mismo tamaño (máx. 3 por fila → fotos consistentes)
+  return 'w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40';
+};
+
+// Máximo 3 integrantes por fila. Así Editorial (6) = 3+3 y Técnico (5) = 3+2
+// centrados, sin estirar a 5 en una sola fila.
+const memberItemWidthClass = (count) => {
+  if (count <= 1) return 'w-full max-w-sm';
+  if (count === 2) return 'w-full sm:w-[calc(50%-1.25rem)] max-w-xs';
+  if (count === 4) return 'w-[calc(50%-1.25rem)] max-w-xs'; // 2 × 2
+  // 3, 5, 6+: hasta 3 por fila; la última fila queda centrada con justify-center
+  return 'w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.75rem)] max-w-xs';
+};
+
+const PersonPortrait = ({ persona, cargoColor, photoClass, delay = 0 }) => {
+  const red = persona.red ? redColor[persona.red] : null;
+  const displayName = getIntegranteDisplayName(persona);
+  const isItsva = isItsvaMember(persona);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 18, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.35, delay, ease: 'easeOut' }}
+      className="flex flex-col items-center text-center"
+    >
+      <div
+        className={`${photoClass} rounded-full overflow-hidden shrink-0 mb-4`}
+        style={{
+          border: `4px solid ${cargoColor}`,
+          boxShadow: `0 12px 40px ${cargoColor}40, 0 0 0 8px ${cargoColor}18`,
+          background: isItsva ? '#FFFFFF' : '#F3F4F6',
+        }}
+      >
+        <img
+          src={getIntegrantePhoto(persona)}
+          alt={isItsva ? 'Logo ITSVA' : displayName}
+          className={`w-full h-full ${isItsva ? 'object-contain p-4' : 'object-cover'}`}
+          style={isItsva ? undefined : { objectPosition: '50% 18%' }}
+          draggable={false}
+          loading="lazy"
+        />
+      </div>
+
+      <h3
+        className="font-bold text-base sm:text-lg leading-snug mb-1.5 px-1"
+        style={{ color: '#0A2A43' }}
+      >
+        {displayName}
+      </h3>
+
+      <p
+        className="text-xs sm:text-sm leading-snug mb-3 px-2 max-w-xs"
+        style={{
+          color: persona.institucion ? '#4B5563' : '#9CA3AF',
+          fontStyle: persona.institucion ? 'normal' : 'italic',
+        }}
+      >
+        {persona.institucion || 'Por confirmar'}
+      </p>
+
+      <div className="flex items-center justify-center gap-2 flex-wrap">
+        {red && (
+          <span
+            className="text-[11px] font-bold px-2.5 py-1 rounded-full"
+            style={{
+              background: red.bg,
+              color: red.text,
+              border: `1px solid ${red.border}45`,
+            }}
+          >
+            {persona.red}
+          </span>
+        )}
+        {!isItsva && persona.orcid && (
+          <a
+            href={`https://orcid.org/${persona.orcid}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-80"
+            style={{ color: '#A6CE39' }}
+            aria-label={`Perfil ORCID de ${displayName}`}
+          >
+            <OrcidIcon />
+            ORCID
+          </a>
+        )}
+      </div>
+    </motion.article>
+  );
+};
+
+const EmptyAreaCard = ({ visual }) => {
+  const Icon = visual.icon;
   return (
     <div
-      className="rounded-2xl p-6 flex flex-col items-center text-center group transition-all duration-300 cursor-default"
+      className="mx-auto max-w-md rounded-3xl px-8 py-14 text-center"
       style={{
-        background: '#FFFFFF',
-        border: '1px solid #E5E7EB',
-        boxShadow: '0 1px 6px rgba(0,0,0,0.05)',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.09)`;
-        e.currentTarget.style.borderTopColor = colors.border;
-        e.currentTarget.style.borderTopWidth = '3px';
-        e.currentTarget.style.transform = 'translateY(-4px)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.05)';
-        e.currentTarget.style.borderTopColor = '#E5E7EB';
-        e.currentTarget.style.borderTopWidth = '1px';
-        e.currentTarget.style.transform = 'translateY(0)';
+        background: visual.bg,
+        border: `1px dashed ${visual.color}50`,
       }}
     >
-      {/* Foto circular */}
-      <div className="relative mb-5">
-        <div
-          className="w-24 h-24 rounded-full overflow-hidden"
-          style={{ border: `3px solid ${colors.border}`, boxShadow: `0 0 16px ${colors.border}30` }}
+      <div
+        className="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-5"
+        style={{
+          background: '#FFFFFF',
+          border: `3px solid ${visual.color}`,
+          boxShadow: `0 8px 28px ${visual.color}30`,
+        }}
+      >
+        <Icon size={36} style={{ color: visual.color, opacity: 0.65 }} />
+      </div>
+      <p className="text-lg font-bold italic mb-1" style={{ color: '#6B7280' }}>
+        Por asignar
+      </p>
+      <p className="text-sm" style={{ color: '#9CA3AF' }}>
+        Área pendiente de asignación
+      </p>
+    </div>
+  );
+};
+
+// Escenario 3D: un slide = un área completa con TODAS sus personas visibles.
+const AreaStage = ({ group, direction, reduceMotion = false }) => {
+  const visual = categoriaVisual[group.categoria] || FALLBACK_VISUAL;
+  const Icon = visual.icon;
+  const count = group.integrantes.length;
+  const photoClass = photoSizeForCount(count || 1);
+  const enterX = direction >= 0 ? 72 : -72;
+  const exitX = direction >= 0 ? -72 : 72;
+
+  return (
+    <motion.div
+      initial={
+        reduceMotion
+          ? { opacity: 0 }
+          : { opacity: 0, x: enterX, rotateY: direction >= 0 ? 22 : -22, scale: 0.96 }
+      }
+      animate={reduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, rotateY: 0, scale: 1 }}
+      exit={
+        reduceMotion
+          ? { opacity: 0 }
+          : { opacity: 0, x: exitX, rotateY: direction >= 0 ? -22 : 22, scale: 0.96 }
+      }
+      transition={{ duration: reduceMotion ? 0.2 : 0.42, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full"
+      style={{ transformStyle: reduceMotion ? undefined : 'preserve-3d' }}
+    >
+      {/* Cabecera del área / cargo */}
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8 px-1">
+        <div className="flex items-center gap-3.5 min-w-0">
+          <div
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
+            style={{
+              background: visual.bg,
+              border: `1px solid ${visual.color}40`,
+              boxShadow: `0 8px 24px ${visual.color}22`,
+            }}
+          >
+            <Icon size={24} style={{ color: visual.color }} aria-hidden="true" />
+          </div>
+          <div className="min-w-0">
+            <p
+              className="text-[11px] font-bold uppercase tracking-[0.18em] mb-1"
+              style={{ color: visual.color }}
+            >
+              Área del comité
+            </p>
+            <h3
+              className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight truncate"
+              style={{ color: '#0A2A43' }}
+            >
+              {group.categoria}
+            </h3>
+          </div>
+        </div>
+        <span
+          className="self-start sm:self-auto text-sm font-bold px-3.5 py-1.5 rounded-full"
+          style={{
+            background: visual.bg,
+            color: visual.color,
+            border: `1px solid ${visual.color}35`,
+          }}
         >
-          <img
-            src={member.image || `https://picsum.photos/seed/${member.seed}/200/200`}
-            alt={member.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            style={{ objectPosition: '50% 18%' }}
-          />
+          {count === 0
+            ? 'Sin asignar'
+            : `${count} ${count === 1 ? 'integrante' : 'integrantes'}`}
+        </span>
+      </div>
+
+      {/* Personas del área — todas visibles */}
+      {count === 0 ? (
+        <EmptyAreaCard visual={visual} />
+      ) : (
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-10 sm:gap-x-10 sm:gap-y-12 max-w-5xl mx-auto">
+          {group.integrantes.map((persona, i) => (
+            <div key={`${group.categoria}-${i}`} className={memberItemWidthClass(count)}>
+              <PersonPortrait
+                persona={persona}
+                cargoColor={visual.color}
+                photoClass={photoClass}
+                delay={0.08 + i * 0.06}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+const AreaCarousel3D = ({ groups }) => {
+  const total = groups.length;
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const pointerStartX = useRef(null);
+  const dragDelta = useRef(0);
+  const resumeTimer = useRef(null);
+  const chipRefs = useRef([]);
+  const chipScroller = useRef(null);
+
+  const group = groups[index];
+  const visual = categoriaVisual[group.categoria] || FALLBACK_VISUAL;
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+
+  const goTo = (nextIndex, dir) => {
+    const wrapped = ((nextIndex % total) + total) % total;
+    setDirection(dir ?? (wrapped > index || (index === total - 1 && wrapped === 0) ? 1 : -1));
+    setIndex(wrapped);
+  };
+
+  const next = () => goTo(index + 1, 1);
+  const prev = () => goTo(index - 1, -1);
+
+  const pauseTemporarily = () => {
+    setPaused(true);
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => setPaused(false), AUTOPLAY_MS * 1.5);
+  };
+
+  useEffect(() => {
+    if (paused || reduceMotion) return undefined;
+    const id = setInterval(() => {
+      setDirection(1);
+      setIndex((i) => (i + 1) % total);
+    }, AUTOPLAY_MS);
+    return () => clearInterval(id);
+  }, [paused, reduceMotion, total]);
+
+  useEffect(() => {
+    const chip = chipRefs.current[index];
+    if (chip && chipScroller.current) {
+      chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [index]);
+
+  useEffect(
+    () => () => {
+      if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    },
+    []
+  );
+
+  const onPointerDown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    pointerStartX.current = e.clientX;
+    dragDelta.current = 0;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (pointerStartX.current == null) return;
+    dragDelta.current = e.clientX - pointerStartX.current;
+  };
+
+  const onPointerUp = () => {
+    if (pointerStartX.current == null) return;
+    const delta = dragDelta.current;
+    pointerStartX.current = null;
+    if (Math.abs(delta) > 60) {
+      pauseTemporarily();
+      if (delta < 0) next();
+      else prev();
+    }
+  };
+
+  return (
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+      }}
+    >
+      {/* Chips de áreas — acceso directo, no ocultan el escenario */}
+      <div
+        ref={chipScroller}
+        className="flex gap-2 overflow-x-auto pb-4 mb-2 scroll-smooth"
+        style={{ scrollbarWidth: 'none' }}
+        role="tablist"
+        aria-label="Áreas del Comité Organizador"
+      >
+        {groups.map((g, i) => {
+          const gVisual = categoriaVisual[g.categoria] || FALLBACK_VISUAL;
+          const GIcon = gVisual.icon;
+          const active = i === index;
+          return (
+            <button
+              key={g.categoria}
+              ref={(el) => {
+                chipRefs.current[i] = el;
+              }}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => {
+                pauseTemporarily();
+                goTo(i, i > index ? 1 : -1);
+              }}
+              className="shrink-0 inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all duration-200"
+              style={{
+                background: active ? gVisual.color : '#FFFFFF',
+                color: active ? '#FFFFFF' : '#374151',
+                border: `1px solid ${active ? gVisual.color : '#E5E7EB'}`,
+                boxShadow: active ? `0 6px 18px ${gVisual.color}40` : 'none',
+              }}
+            >
+              <GIcon size={14} aria-hidden="true" />
+              {g.categoria}
+              <span
+                className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{
+                  background: active ? 'rgba(255,255,255,0.22)' : `${gVisual.color}14`,
+                  color: active ? '#FFFFFF' : gVisual.color,
+                }}
+              >
+                {g.integrantes.length}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Controles */}
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <p className="text-sm font-semibold tabular-nums" style={{ color: '#6B7280' }}>
+          <span style={{ color: visual.color }}>{String(index + 1).padStart(2, '0')}</span>
+          <span className="mx-1.5">/</span>
+          {String(total).padStart(2, '0')} áreas
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? 'Reanudar carrusel' : 'Pausar carrusel'}
+            className="w-11 h-11 rounded-full flex items-center justify-center transition-transform hover:scale-105"
+            style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', color: '#0A2A43' }}
+          >
+            {paused || reduceMotion ? <Play size={16} /> : <Pause size={16} />}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              pauseTemporarily();
+              prev();
+            }}
+            aria-label="Área anterior"
+            className="w-11 h-11 rounded-full flex items-center justify-center transition-transform hover:scale-105"
+            style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', color: '#0A2A43' }}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              pauseTemporarily();
+              next();
+            }}
+            aria-label="Área siguiente"
+            className="w-11 h-11 rounded-full flex items-center justify-center transition-transform hover:scale-105"
+            style={{
+              background: visual.color,
+              border: `1px solid ${visual.color}`,
+              color: '#FFFFFF',
+              boxShadow: `0 8px 20px ${visual.color}45`,
+            }}
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
 
-      {/* Nombre */}
-      <h3 className="font-bold text-base leading-tight mb-1" style={{ color: '#0A2A43' }}>{member.name}</h3>
-
-      {/* Institución */}
-      <p className="text-xs mb-3 leading-snug" style={{ color: '#4B5563' }}>{member.institution}</p>
-
-      {/* ORCID */}
-      {member.orcid ? (
-        <a
-          href={`https://orcid.org/${member.orcid}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-opacity hover:opacity-80"
-          style={{ color: '#A6CE39' }}
-          aria-label={`Perfil ORCID de ${member.name}`}
-        >
-          <svg width="12" height="12" viewBox="0 0 256 256" fill="none" aria-hidden="true">
-            <path d="M128 256C198.7 256 256 198.7 256 128C256 57.3 198.7 0 128 0C57.3 0 0 57.3 0 128C0 198.7 57.3 256 128 256Z" fill="#A6CE39" />
-            <path d="M86.3 186.2H70.9V79.1H86.3V186.2Z" fill="#FFF" />
-            <path d="M108.9 79.1H155.3C178.2 79.1 193.3 93.2 193.3 113.6C193.3 134.3 177.8 148.3 155 148.3H124.3V186.2H108.9V79.1ZM124.3 134.3H153.2C168.9 134.3 177.8 125.8 177.8 113.6C177.8 101.1 168.9 93.1 153.2 93.1H124.3V134.3Z" fill="#FFF" />
-            <path d="M78.6 65.2C83.8 65.2 88.1 60.9 88.1 55.7C88.1 50.5 83.8 46.2 78.6 46.2C73.4 46.2 69.1 50.5 69.1 55.7C69.1 60.9 73.4 65.2 78.6 65.2Z" fill="#FFF" />
-          </svg>
-          {member.orcid}
-        </a>
-      ) : null}
-
-      {/* Rol */}
-      <span
-        className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
-        style={{ background: colors.bg, color: colors.text, border: `1px solid ${colors.border}40` }}
+      {/* Escenario 3D full */}
+      <div
+        className="relative rounded-[1.75rem]"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 60% at 50% 0%, ${visual.color}14 0%, transparent 55%),
+            linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%)
+          `,
+          border: `1px solid ${visual.color}28`,
+          boxShadow: `0 20px 60px rgba(10,42,67,0.08), inset 0 1px 0 rgba(255,255,255,0.8)`,
+          minHeight: '420px',
+        }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        role="region"
+        aria-roledescription="carrusel"
+        aria-label={`Área ${group.categoria}`}
+        aria-live="polite"
       >
-        {member.role}
-      </span>
+        <div
+          className="px-5 sm:px-8 lg:px-10 py-8 sm:py-10 lg:py-12"
+          style={{
+            perspective: reduceMotion ? undefined : '1200px',
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <AreaStage
+              key={group.categoria}
+              group={group}
+              direction={direction}
+              reduceMotion={reduceMotion}
+            />
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Progreso autoplay */}
+      {!reduceMotion && (
+        <div className="mt-5 h-1 rounded-full overflow-hidden" style={{ background: '#E5E7EB' }} aria-hidden="true">
+          <div
+            key={`${index}-${paused}`}
+            className="h-full rounded-full"
+            style={{
+              width: paused ? '100%' : '0%',
+              background: visual.color,
+              opacity: paused ? 0.3 : 1,
+              animation: paused ? 'none' : `comiteAreaProgress ${AUTOPLAY_MS}ms linear forwards`,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Dots por área */}
+      <div
+        className="mt-4 flex items-center justify-center gap-1.5 flex-wrap"
+        role="tablist"
+        aria-label="Ir a área"
+      >
+        {groups.map((g, i) => {
+          const gVisual = categoriaVisual[g.categoria] || FALLBACK_VISUAL;
+          const active = i === index;
+          return (
+            <button
+              key={g.categoria}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              aria-label={`Ir a ${g.categoria}`}
+              onClick={() => {
+                pauseTemporarily();
+                goTo(i, i > index ? 1 : -1);
+              }}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: active ? 22 : 8,
+                height: 8,
+                background: active ? gVisual.color : '#D1D5DB',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <style>{`
+        @keyframes comiteAreaProgress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 };
 
-// Tabla jerárquica rediseñada: cada grupo se diferencia visualmente con icono,
-// color de acento, borde lateral, y numeración secuencial. Las filas de integrantes
-// conservan la foto, el nombre y el badge de red (ITSVA / RELATIC).
-const GroupedCommitteeTable = ({ groups }) => {
-  return (
-    <div className="overflow-x-auto rounded-xl" style={{ border: '1px solid #E5E7EB' }}>
-      <table className="w-full text-left border-collapse" aria-label="Comité Organizador por área">
-        <thead>
-          <tr style={{ background: '#F8F9FA' }}>
-            <th
-              scope="col"
-              className="px-4 sm:px-5 py-3 text-xs font-bold uppercase tracking-wide"
-              style={{ color: '#4B5563', borderBottom: '1px solid #E5E7EB' }}
-            >
-              Integrante
-            </th>
-            <th
-              scope="col"
-              className="px-4 sm:px-5 py-3 text-xs font-bold uppercase tracking-wide"
-              style={{ color: '#4B5563', borderBottom: '1px solid #E5E7EB' }}
-            >
-              Institución / Afiliación
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {groups.map((group, groupIndex) => {
-            const visual = categoriaVisual[group.categoria] || {
-              icon: FileText,
-              color: '#6B7280',
-              bg: 'rgba(107,114,128,0.06)',
-            };
-            const Icon = visual.icon;
-
-            return (
-              <Fragment key={group.categoria}>
-                {/* Encabezado de área con icono, color y número */}
-                <tr>
-                  <th
-                    scope="colgroup"
-                    colSpan={2}
-                    className="px-4 sm:px-5 py-3 text-left"
-                    style={{
-                      background: visual.bg,
-                      borderTop: '1px solid #E5E7EB',
-                      borderBottom: '1px solid #E5E7EB',
-                      borderLeft: `4px solid ${visual.color}`,
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Número secuencial */}
-                      <span
-                        className="text-xs font-black leading-none select-none"
-                        style={{ color: visual.color, opacity: 0.45, minWidth: '22px' }}
-                      >
-                        {String(groupIndex + 1).padStart(2, '0')}
-                      </span>
-                      {/* Icono */}
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{
-                          background: `${visual.color}15`,
-                          border: `1px solid ${visual.color}30`,
-                        }}
-                      >
-                        <Icon size={16} style={{ color: visual.color }} />
-                      </div>
-                      {/* Nombre de categoría + badge de conteo */}
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className="text-sm font-bold"
-                          style={{ color: '#0A2A43' }}
-                        >
-                          {group.categoria}
-                        </span>
-                        {group.integrantes.length > 0 && (
-                          <span
-                            className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                            style={{
-                              background: `${visual.color}12`,
-                              color: visual.color,
-                              border: `1px solid ${visual.color}30`,
-                            }}
-                          >
-                            {group.integrantes.length}{' '}
-                            {group.integrantes.length === 1 ? 'integrante' : 'integrantes'}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-
-                {group.integrantes.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={2}
-                      className="px-4 sm:px-5 py-3 text-sm italic"
-                      style={{
-                        color: '#6B7280',
-                        borderBottom: '1px solid #E5E7EB',
-                        borderLeft: `4px solid ${visual.color}20`,
-                      }}
-                    >
-                      Por asignar
-                    </td>
-                  </tr>
-                ) : (
-                  group.integrantes.map((persona, i) => {
-                    const red = redColor[persona.red];
-                    return (
-                      <tr
-                        key={`${group.categoria}-${i}`}
-                        className="transition-colors duration-150"
-                        style={{
-                          background: 'transparent',
-                          borderLeft: `4px solid ${visual.color}20`,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#F8F9FA';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <td
-                          className="px-4 sm:px-5 py-4 sm:py-5 text-sm align-middle"
-                          style={{ borderBottom: '1px solid #E5E7EB' }}
-                        >
-                          <div className="flex items-center gap-4 sm:gap-5">
-                            <div
-                              className="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden shrink-0"
-                              style={{
-                                border: `3px solid ${visual.color}`,
-                                boxShadow: `0 0 16px ${visual.color}30`,
-                              }}
-                            >
-                              <img
-                                src={getIntegrantePhoto(persona)}
-                                alt={persona.nombre}
-                                className="w-full h-full object-cover"
-                                style={{ objectPosition: '50% 18%' }}
-                              />
-                            </div>
-                            <div className="min-w-0">
-                              <p
-                                className="font-semibold text-sm sm:text-base leading-tight"
-                                style={{ color: '#0A2A43' }}
-                              >
-                                {persona.nombre}
-                              </p>
-                              {persona.orcid && (
-                                <a
-                                  href={`https://orcid.org/${persona.orcid}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium transition-opacity hover:opacity-80"
-                                  style={{ color: '#A6CE39' }}
-                                  aria-label={`Perfil ORCID de ${persona.nombre}`}
-                                >
-                                  <svg
-                                    width="11"
-                                    height="11"
-                                    viewBox="0 0 256 256"
-                                    fill="none"
-                                    aria-hidden="true"
-                                  >
-                                    <path
-                                      d="M128 256C198.7 256 256 198.7 256 128C256 57.3 198.7 0 128 0C57.3 0 0 57.3 0 128C0 198.7 57.3 256 128 256Z"
-                                      fill="#A6CE39"
-                                    />
-                                    <path
-                                      d="M86.3 186.2H70.9V79.1H86.3V186.2Z"
-                                      fill="#FFF"
-                                    />
-                                    <path
-                                      d="M108.9 79.1H155.3C178.2 79.1 193.3 93.2 193.3 113.6C193.3 134.3 177.8 148.3 155 148.3H124.3V186.2H108.9V79.1ZM124.3 134.3H153.2C168.9 134.3 177.8 125.8 177.8 113.6C177.8 101.1 168.9 93.1 153.2 93.1H124.3V134.3Z"
-                                      fill="#FFF"
-                                    />
-                                    <path
-                                      d="M78.6 65.2C83.8 65.2 88.1 60.9 88.1 55.7C88.1 50.5 83.8 46.2 78.6 46.2C73.4 46.2 69.1 50.5 69.1 55.7C69.1 60.9 73.4 65.2 78.6 65.2Z"
-                                      fill="#FFF"
-                                    />
-                                  </svg>
-                                  ORCID
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className="px-4 sm:px-5 py-4 sm:py-5 text-sm align-middle"
-                          style={{ borderBottom: '1px solid #E5E7EB' }}
-                        >
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span
-                              style={{
-                                color: persona.institucion ? '#1F2937' : '#6B7280',
-                                fontStyle: persona.institucion ? 'normal' : 'italic',
-                              }}
-                            >
-                              {persona.institucion || 'Por confirmar'}
-                            </span>
-                            {red && (
-                              <span
-                                className="text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0"
-                                style={{
-                                  background: red.bg,
-                                  color: red.text,
-                                  border: `1px solid ${red.border}40`,
-                                }}
-                              >
-                                {persona.red}
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </Fragment>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-// Componente Comite con acordeones por categoría
 const Comite = () => {
-  const [openCategory, setOpenCategory] = useState(categories[0]);
-
-  const toggle = (cat) => {
-    setOpenCategory(openCategory === cat ? null : cat);
-  };
-
   return (
     <section
       id="comite"
       className="py-20 sm:py-28 relative overflow-hidden"
       style={{ background: '#F8F9FA' }}
     >
-      {/* Decoración sutil */}
       <div
-        className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        className="absolute -top-24 right-0 w-[28rem] h-[28rem] rounded-full opacity-[0.04] blur-3xl pointer-events-none"
+        style={{ background: '#007AFF' }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
         style={{ background: '#F4A800' }}
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Encabezado */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 sm:mb-12">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-5"
-            style={{ background: 'rgba(0,122,255,0.08)', color: '#007AFF', border: '1px solid rgba(0,122,255,0.25)' }}
+            style={{
+              background: 'rgba(0,122,255,0.08)',
+              color: '#007AFF',
+              border: '1px solid rgba(0,122,255,0.25)',
+            }}
           >
             Organización
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black section-underline" style={{ color: '#0A2A43' }}>
+          <h2
+            className="text-3xl sm:text-4xl lg:text-5xl font-black section-underline"
+            style={{ color: '#0A2A43' }}
+          >
             Comité Organizador
           </h2>
-          <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl mx-auto" style={{ color: '#4B5563' }}>
-            Académicos e investigadores de instituciones líderes comprometidos con la excelencia del IV Congreso RELATIC 2026.
+          <p
+            className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl mx-auto"
+            style={{ color: '#4B5563' }}
+          >
+            Académicos e investigadores de instituciones líderes comprometidos con la excelencia
+            del IV Congreso RELATIC 2026.
+          </p>
+          <p className="mt-3 text-sm font-semibold" style={{ color: '#9CA3AF' }}>
+            {totalMiembros} integrantes · {comiteGrupos.length} áreas
           </p>
         </div>
 
-        {/* Acordeón por categoría */}
-        <div className="space-y-4">
-          {categories.map((cat) => {
-            const isOpen = openCategory === cat;
-            const colors = categoryColor[cat];
-            return (
-              <div
-                key={cat}
-                className="rounded-2xl overflow-hidden transition-all duration-300"
-                style={{
-                  border: `1px solid ${isOpen ? colors.border + '50' : '#E5E7EB'}`,
-                  background: '#FFFFFF',
-                  boxShadow: isOpen ? '0 4px 16px rgba(0,0,0,0.06)' : '0 1px 4px rgba(0,0,0,0.04)',
-                }}
-              >
-                {/* Header del acordeón */}
-                <button
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left transition-colors duration-200"
-                  style={{ background: isOpen ? `${colors.bg}` : 'transparent' }}
-                  onClick={() => toggle(cat)}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ background: colors.border }}
-                    />
-                    <h3 className="text-lg sm:text-xl font-bold" style={{ color: '#0A2A43' }}>{cat}</h3>
-                    <span
-                      className="text-xs px-2.5 py-0.5 rounded-full font-medium"
-                      style={{ background: colors.bg, color: colors.text, border: `1px solid ${colors.border}40` }}
-                    >
-                      {getMemberCount(comiteData[cat])} miembros
-                    </span>
-                  </div>
-                  <ChevronDown
-                    size={20}
-                    style={{
-                      color: '#4B5563',
-                      transform: isOpen ? 'rotate(180deg)' : 'rotate(0)',
-                      transition: 'transform 0.3s ease',
-                    }}
-                  />
-                </button>
-
-                {/* Tabla jerárquica por área (o grid de tarjetas para categorías planas) */}
-                {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6">
-                    {isGroupedCommittee(comiteData[cat]) ? (
-                      <GroupedCommitteeTable groups={comiteData[cat]} />
-                    ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {comiteData[cat].map((member, i) => (
-                          <MemberCard key={i} member={member} category={cat} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <AreaCarousel3D groups={comiteGrupos} />
       </div>
     </section>
   );

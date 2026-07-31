@@ -12,6 +12,15 @@ import {
   FlaskConical,
 } from 'lucide-react';
 
+// ── Importación de imágenes de revistas ──
+import imgDialogosEducativos from '../assets/revistas/dialogoseducativos.png';
+import imgIcuali from '../assets/revistas/icuali.png';
+import imgMundoSostenible from '../assets/revistas/mundosostenible.png';
+import imgEducaf5 from '../assets/revistas/educaf5.png';
+import imgEducacionCiencia from '../assets/revistas/educacioncienciaycambio.png';
+import imgPraxisTransformacion from '../assets/revistas/praxisytransformacion.png';
+import imgScientiaIter from '../assets/revistas/scientia.jpeg';
+
 /**
  * Espacios de publicación de productos científicos del congreso.
  * Estructura data-driven: agregar un portal o una revista solo requiere
@@ -35,6 +44,7 @@ const espaciosPublicacion = [
         descripcion: 'Investigación y reflexión sobre prácticas educativas y procesos formativos en Latinoamérica.',
         url: 'https://relaticpanama.org/_journals/index.php/dialogoseducativos',
         icon: GraduationCap,
+        imagen: imgDialogosEducativos,
       },
       {
         id: 'icuali',
@@ -43,6 +53,7 @@ const espaciosPublicacion = [
         descripcion: 'Investigación cualitativa aplicada a contextos sociales, educativos y culturales.',
         url: 'https://relaticpanama.org/_journals/index.php/icuali',
         icon: Users,
+        imagen: imgIcuali,
       },
       {
         id: 'mundo-sostenible',
@@ -51,6 +62,7 @@ const espaciosPublicacion = [
         descripcion: 'Desarrollo sostenible, medio ambiente y responsabilidad social desde una mirada interdisciplinaria.',
         url: 'https://relaticpanama.org/_journals/index.php/mundosostenible',
         icon: Globe2,
+        imagen: imgMundoSostenible,
       },
       {
         id: 'educaf5-berit',
@@ -59,6 +71,7 @@ const espaciosPublicacion = [
         descripcion: 'Educación, formación y transferencia de conocimiento en entornos académicos y profesionales.',
         url: 'https://relaticpanama.org/_journals/index.php/educaf5-berit',
         icon: Lightbulb,
+        imagen: imgEducaf5,
       },
       {
         id: 'scientia-iter',
@@ -67,6 +80,7 @@ const espaciosPublicacion = [
         descripcion: 'Trayectorias científicas, innovación y producción de conocimiento en la región.',
         url: 'https://relaticpanama.org/_journals/index.php/scientiaiter',
         icon: Compass,
+        imagen: imgScientiaIter,
       },
     ],
   },
@@ -87,6 +101,7 @@ const espaciosPublicacion = [
         descripcion: 'Articulación entre educación, ciencia y transformaciones sociales en el contexto latinoamericano.',
         url: 'https://revistas.editorialecuador.org/index.php/educacioncienciaycambiosocial',
         icon: Sparkles,
+        imagen: imgEducacionCiencia,
       },
       {
         id: 'praxis-transformacion',
@@ -95,6 +110,7 @@ const espaciosPublicacion = [
         descripcion: 'Prácticas pedagógicas, innovación educativa y transformación de los sistemas formativos.',
         url: 'https://revistas.editorialecuador.org/index.php/praxisytransformacioneduativa',
         icon: FlaskConical,
+        imagen: imgPraxisTransformacion,
       },
     ],
   },
@@ -136,17 +152,46 @@ const RevistaCard = ({ revista, accent }) => {
       />
 
       <div className="p-5 sm:p-6 flex flex-col flex-1">
-        {/* Icono y badge de acceso abierto */}
-        <div className="flex items-start justify-between mb-4">
-          <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-            style={{
-              background: `${accent}10`,
-              border: `1px solid ${accent}25`,
-            }}
+        {/* ── Imagen / Logo de la revista ── */}
+        <figure className="flex flex-col items-center mb-5">
+          {revista.imagen ? (
+            <div
+              className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+              style={{
+                background: '#F9FAFB',
+                border: '1px solid #E5E7EB',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+              }}
+            >
+              <img
+                src={revista.imagen}
+                alt={`Logo de ${revista.titulo}`}
+                className="w-full h-full object-contain p-2"
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            /* Fallback: ícono de Lucide cuando no hay imagen disponible */
+            <div
+              className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+              style={{
+                background: `${accent}08`,
+                border: `2px dashed ${accent}40`,
+              }}
+            >
+              <Icon size={48} style={{ color: accent, opacity: 0.6 }} />
+            </div>
+          )}
+          <figcaption
+            className="text-sm font-semibold text-center mt-3 leading-tight"
+            style={{ color: '#0A2A43' }}
           >
-            <Icon size={20} style={{ color: accent }} />
-          </div>
+            {revista.titulo}
+          </figcaption>
+        </figure>
+
+        {/* Badge de acceso abierto */}
+        <div className="flex items-center justify-center mb-4">
           <span
             className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full"
             style={{
@@ -160,27 +205,22 @@ const RevistaCard = ({ revista, accent }) => {
           </span>
         </div>
 
-        {/* Título */}
-        <h4 className="text-base sm:text-lg font-bold leading-tight mb-2" style={{ color: '#0A2A43' }}>
-          {revista.titulo}
-        </h4>
-
         {/* Tagline diferenciador */}
         <p
-          className="text-sm font-medium leading-snug mb-3"
+          className="text-sm font-medium leading-snug mb-3 text-center"
           style={{ color: accent }}
         >
           {revista.tagline}
         </p>
 
         {/* Descripción */}
-        <p className="text-sm leading-relaxed flex-1 mb-5" style={{ color: '#4B5563' }}>
+        <p className="text-sm leading-relaxed flex-1 mb-5 text-center" style={{ color: '#4B5563' }}>
           {revista.descripcion}
         </p>
 
         {/* CTA */}
         <span
-          className="inline-flex items-center gap-2 text-sm font-semibold mt-auto transition-all duration-200 group-hover:gap-3"
+          className="inline-flex items-center justify-center gap-2 text-sm font-semibold mt-auto transition-all duration-200 group-hover:gap-3"
           style={{ color: accent }}
         >
           Visitar portal
@@ -227,7 +267,7 @@ const PortalGroup = ({ portal }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
         {portal.revistas.map((revista) => (
           <RevistaCard key={revista.id} revista={revista} accent={portal.accent} />
         ))}

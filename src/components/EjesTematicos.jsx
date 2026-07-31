@@ -9,6 +9,14 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
+// ── Importación de imágenes de ejes temáticos ──
+import imgEje1 from '../assets/ejestematicos/eje1.png';
+import imgEje2 from '../assets/ejestematicos/eje2.png';
+import imgEje3 from '../assets/ejestematicos/eje3.png';
+import imgEje4 from '../assets/ejestematicos/eje4.png';
+import imgEje5 from '../assets/ejestematicos/eje5.png';
+import imgEje6 from '../assets/ejestematicos/eje6.png';
+
 // Ejes temáticos del congreso
 const ejes = [
   {
@@ -20,6 +28,7 @@ const ejes = [
     bg: 'rgba(34,197,94,0.07)',
     border: 'rgba(34,197,94,0.2)',
     hoverBorder: '#22c55e',
+    imagen: imgEje1,
   },
   {
     icon: Cpu,
@@ -30,6 +39,7 @@ const ejes = [
     bg: 'rgba(0,122,255,0.07)',
     border: 'rgba(0,122,255,0.2)',
     hoverBorder: '#007AFF',
+    imagen: imgEje2,
   },
   {
     icon: Landmark,
@@ -40,6 +50,7 @@ const ejes = [
     bg: 'rgba(244,168,0,0.07)',
     border: 'rgba(244,168,0,0.2)',
     hoverBorder: '#F4A800',
+    imagen: imgEje3,
   },
   {
     icon: GraduationCap,
@@ -50,6 +61,7 @@ const ejes = [
     bg: 'rgba(44,0,85,0.06)',
     border: 'rgba(44,0,85,0.15)',
     hoverBorder: '#2C0055',
+    imagen: imgEje4,
   },
   {
     icon: BarChart3,
@@ -60,6 +72,7 @@ const ejes = [
     bg: 'rgba(255,98,0,0.07)',
     border: 'rgba(255,98,0,0.2)',
     hoverBorder: '#FF6200',
+    imagen: imgEje5,
   },
   {
     icon: MapPin,
@@ -70,6 +83,7 @@ const ejes = [
     bg: 'rgba(0,2,233,0.06)',
     border: 'rgba(0,2,233,0.15)',
     hoverBorder: '#0002E9',
+    imagen: imgEje6,
   },
 ];
 
@@ -102,18 +116,38 @@ const EjeCard = ({ eje, index }) => {
       />
 
       <div className="p-6 sm:p-7 flex flex-col gap-5 flex-1">
-        {/* Header: número + icono */}
-        <div className="flex items-start justify-between">
+        {/* ── Imagen del eje temático ── */}
+        <figure className="flex flex-col items-center">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+            className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+            style={{
+              background: '#F9FAFB',
+              border: `1.5px solid ${eje.border}`,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            }}
+          >
+            <img
+              src={eje.imagen}
+              alt={eje.title}
+              className="w-full h-full object-contain p-1"
+              loading="lazy"
+            />
+          </div>
+          <figcaption className="sr-only">{eje.title}</figcaption>
+        </figure>
+
+        {/* Header: número */}
+        <div className="flex items-center justify-between">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{
               background: eje.bg,
               border: `1.5px solid ${eje.border}`,
             }}
           >
-            <Icon size={28} style={{ color: eje.color }} />
+            <Icon size={20} style={{ color: eje.color }} />
           </div>
-          {/* Número de eje — más visible */}
+          {/* Número de eje */}
           <span
             className="text-4xl sm:text-5xl font-black leading-none select-none transition-opacity duration-300 group-hover:opacity-20"
             style={{ color: eje.color, opacity: 0.1 }}
