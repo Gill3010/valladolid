@@ -41,6 +41,7 @@ import imgVicente from '../assets/comite/Vicente.jpeg';
 import logoItsva from '../assets/logos/logo-itsva.jpeg';
 import imgAntonio from '../assets/comite/Antonio.jpg';
 import imgFabiola from '../assets/comite/Fabiola.jpeg';
+import imgAymara from '../assets/comite/Aymara.png';
 
 // Comité Organizador jerárquico por área (orden fijo, no alfabético).
 // "institucion" = universidad/afiliación real (cuando se conoce). "red" = a qué
@@ -89,7 +90,7 @@ const comiteOrganizadorGrupos = [
       { nombre: 'ITESCAM', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA' },
       { nombre: 'Dra. Isabel Menacho Vargas', institucion: 'UNMSM la Decana de América', red: 'RELATIC', image: imgIsabel, orcid: '0000-0001-6246-4618' },
       { nombre: 'Dr. Jesús Antonio Santos Tejero', institucion: 'Instituto Tecnológico Superior Campus Valladolid, México', red: 'ITSVA', image: imgAntonio, orcid: '0000-0002-9482-8225' },
-      { nombre: 'Dra. Fabiola Colmenero Fonseca', institucion: 'Universidad Europea de Madrid', red: 'RELATIC', image: imgFabiola, orcid: '0000-0003-1901-2725' },
+      { nombre: 'Dra. Fabiola Colmenero Fonseca', institucion: 'Universitat Politècnica de València', red: 'RELATIC', image: imgFabiola, orcid: '0000-0003-1901-2725' },
     ],
   },
   {
@@ -130,7 +131,7 @@ const comiteOrganizadorGrupos = [
       { nombre: 'Dra. Mónica Contreras', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgMonica, orcid: '0000-0003-0972-6951' },
       { nombre: 'Dra. Coulette C. Andrews T.', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgCoulette, orcid: '0000-0002-7708-4594' },
       { nombre: 'Dra. Keyla Urbina', institucion: 'Universidad Latina, Panamá', red: 'RELATIC', image: imgKeyla, orcid: '0000-0003-3594-7010' },
-      { nombre: 'Dra. Aymara Pacheco', institucion: 'Universidad de Santander', red: 'RELATIC', orcid: '0000-0003-2859-7817' },
+      { nombre: 'Dra. Aymara Pacheco', institucion: 'Universidad de Santander', red: 'RELATIC', image: imgAymara, orcid: '0000-0003-2859-7817' },
       { nombre: 'M. Sc. Zenaida Fossatti', institucion: 'Universidad de Panamá, Panamá', red: 'RELATIC', image: imgZenaida, orcid: '0009-0008-6717-3930' },
     ],
   },
@@ -355,9 +356,11 @@ const PersonPortrait = ({ persona, cargoColor, photoClass, delay = 0 }) => {
             href={`https://orcid.org/${persona.orcid}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-80"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-80 relative z-10"
             style={{ color: '#A6CE39' }}
             aria-label={`Perfil ORCID de ${displayName}`}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
           >
             <OrcidIcon />
             ORCID
@@ -558,8 +561,15 @@ const AreaCarousel3D = ({ groups }) => {
     []
   );
 
+  const isInteractiveTarget = (target) => {
+    const el = target?.nodeType === 3 ? target.parentElement : target;
+    return Boolean(el?.closest?.('a, button, select, input, label, [role="link"]'));
+  };
+
   const onPointerDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    // No capturar el pointer sobre ORCID u otros enlaces
+    if (isInteractiveTarget(e.target)) return;
     pointerStartX.current = e.clientX;
     dragDelta.current = 0;
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -835,7 +845,7 @@ const Comite = () => {
       </div>
     </section>
   );
-  
+
 };
 
 export default Comite;

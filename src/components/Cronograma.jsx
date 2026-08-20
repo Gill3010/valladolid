@@ -6,7 +6,7 @@ import { Clock, Mic, Coffee, BookOpen, Award, Users } from 'lucide-react';
 const schedule = {
   '7 Oct': [
     { time: '08:00', title: 'Registro y Ceremonia de Inauguración', speaker: 'Dr. Carlos Méndez Ríos — Rector ITSVA', icon: Award, type: 'ceremony' },
-    { time: '09:00', title: 'Conferencia Magistral de Apertura: Inteligencia Artificial y planeación docente: Riesgos y Desafíos', speaker: 'Dr. Antonio Jesús Santos — ITSVA', icon: Mic, type: 'keynote' },
+    { time: '09:00', title: 'Conferencia Magistral de Apertura: Inteligencia Artificial y planeación docente: Riesgos y Desafíos', speaker: 'Dr. Jesús Antonio Santos Tejero — ITSVA', icon: Mic, type: 'keynote' },
     { time: '10:00', title: 'Panel: Redes Académicas en América Latina', speaker: 'Dr. Jorge Ramírez & Dra. Sofía Pérez', icon: Users, type: 'panel' },
     { time: '11:00', title: 'Receso / Café', speaker: '', icon: Coffee, type: 'break' },
     { time: '11:30', title: 'Conferencia Magistral: Investigación cualitativa en clave de inteligencia artificial: retos éticos, epistemológicos y pedagógicos en educación latinoamericana', speaker: 'Dr. Carlos Viltre — Centro Latinoamericano de Estudios en Epistemología Pedagógica', icon: Mic, type: 'keynote' },

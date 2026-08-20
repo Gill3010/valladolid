@@ -156,12 +156,14 @@ const RevistaCard = ({ revista }) => {
       href={revista.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col rounded-2xl transition-all duration-300 h-full overflow-hidden"
+      className="group relative z-10 flex flex-col rounded-2xl transition-all duration-300 h-full overflow-hidden"
       style={{
         background: '#FFFFFF',
         border: `1.5px solid ${accent}55`,
         boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
       }}
+      onClick={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = accent;
         e.currentTarget.style.transform = 'translateY(-4px)';
@@ -254,7 +256,7 @@ const RevistaCard = ({ revista }) => {
           {revista.tagline}
         </p>
 
-        <p className="text-sm leading-relaxed flex-1 mb-5 text-center" style={{ color: '#4B5563' }}>
+        <p className="text-sm leading-relaxed flex-1 mb-5 text-justify" style={{ color: '#4B5563', hyphens: 'auto', wordBreak: 'break-word' }}>
           {revista.descripcion}
         </p>
 
@@ -404,8 +406,10 @@ const PublicacionesCarousel = ({ items }) => {
     []
   );
 
-  const isInteractiveTarget = (target) =>
-    Boolean(target?.closest?.('a, button, select, input, label'));
+  const isInteractiveTarget = (target) => {
+    const el = target?.nodeType === 3 ? target.parentElement : target;
+    return Boolean(el?.closest?.('a, button, select, input, label, [role="link"]'));
+  };
 
   const onPointerDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;

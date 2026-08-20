@@ -453,7 +453,7 @@ const PlanCard = ({ plan, selection, onSelectionChange, fieldSuffix = '' }) => {
                   className="text-4xl font-black"
                   style={{ color: plan.featured ? accent : '#0A2A43' }}
                 >
-                  {formatMoney(price)}
+                  {formatMoney(withSurcharge(price))}
                 </span>
                 <span className="text-base font-semibold" style={{ color: '#4B5563' }}>
                   USD
@@ -463,7 +463,7 @@ const PlanCard = ({ plan, selection, onSelectionChange, fieldSuffix = '' }) => {
           </div>
           {!isFree && (
             <p className="text-sm mt-1" style={{ color: '#6B7280' }}>
-              No afiliados RELATIC: {formatMoney(withSurcharge(price))} USD
+              Afiliados RELATIC: {formatMoney(price)} USD
             </p>
           )}
           <div
@@ -493,12 +493,16 @@ const PlanCard = ({ plan, selection, onSelectionChange, fieldSuffix = '' }) => {
 
         {plan.featured ? (
           <a
-            href="#registro"
-            className="block text-center w-full py-4 rounded-xl font-bold text-base text-white transition-all duration-300 hover:scale-105"
+            href="https://eventonexus.com/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative z-10 block text-center w-full py-4 rounded-xl font-bold text-base text-white transition-all duration-300 hover:scale-105"
             style={{
               background: accent,
               boxShadow: `0 6px 20px ${accent}59`,
             }}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
             onMouseEnter={(e) => {
               e.currentTarget.style.filter = 'brightness(1.08)';
               e.currentTarget.style.boxShadow = `0 8px 24px ${accent}66`;
@@ -512,13 +516,17 @@ const PlanCard = ({ plan, selection, onSelectionChange, fieldSuffix = '' }) => {
           </a>
         ) : (
           <a
-            href="#registro"
-            className="block text-center w-full py-4 rounded-xl font-bold text-base transition-all duration-300 hover:text-white"
+            href="https://eventonexus.com/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative z-10 block text-center w-full py-4 rounded-xl font-bold text-base transition-all duration-300 hover:text-white"
             style={{
               border: `1.5px solid ${accent}`,
               color: accent,
               background: 'transparent',
             }}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = accent;
               e.currentTarget.style.color = '#FFFFFF';
@@ -689,8 +697,10 @@ const CostosCarousel = ({ items }) => {
     []
   );
 
-  const isInteractiveTarget = (target) =>
-    Boolean(target?.closest?.('select, button, a, input, label, option'));
+  const isInteractiveTarget = (target) => {
+    const el = target?.nodeType === 3 ? target.parentElement : target;
+    return Boolean(el?.closest?.('select, button, a, input, label, option, [role="link"]'));
+  };
 
   const onPointerDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;

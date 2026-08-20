@@ -37,6 +37,8 @@ const editorsData = [
     orcid: '0009-0007-1212-718X',
     email: 'desarrolloyoperaciones@relaticpanama.org',
     photoSlug: 'Is.jpeg',
+    // Cuerpo completo de pie — centramos para mostrar torso+rostro
+    photoPosition: '50% 30%',
   },
   {
     id: 2,
@@ -48,6 +50,8 @@ const editorsData = [
     orcid: '0000-0003-0972-6951',
     email: 'academico@relaticpanama.org',
     photoSlug: 'Monica.jpeg',
+    // Selfie primer plano — la foto ya es solo rostro, centrar
+    photoPosition: '50% 55%',
   },
   {
     id: 3,
@@ -59,6 +63,8 @@ const editorsData = [
     orcid: '0000-0003-2898-063X',
     email: 'olga.samboy@minerd.gob.do',
     photoSlug: 'Olga.png',
+    // Retrato medio-busto cuadrado — centrar bien
+    photoPosition: '50% 20%',
   },
   {
     id: 4,
@@ -70,6 +76,8 @@ const editorsData = [
     orcid: '0000-0003-0289-8427',
     email: 'abernal2009@gmail.com',
     photoSlug: 'Augusto.jpeg',
+    // Busto con brazos cruzados, fondo blanco — centrar
+    photoPosition: '50% 25%',
   },
   {
     id: 5,
@@ -81,6 +89,8 @@ const editorsData = [
     orcid: '0009-0004-4495-8402',
     email: 'kelis_montes@hotmail.com',
     photoSlug: 'Kelis.jpg',
+    // Selfie medio-cuerpo vertical — centrar en rostro/torso
+    photoPosition: '50% 35%',
   },
   {
     id: 6,
@@ -92,6 +102,8 @@ const editorsData = [
     orcid: '0000-0002-1500-8000',
     email: 'kllopiz@uclv.cu',
     photoSlug: 'Karel.jpeg',
+    // Retrato profesional fondo negro — muy bien encuadrado
+    photoPosition: '50% 20%',
   },
   {
     id: 7,
@@ -103,6 +115,8 @@ const editorsData = [
     orcid: '0000-0002-1500-8000',
     email: 'margenes@uniss.edu.cu',
     photoSlug: 'kenialiss.jpeg',
+    // Selfie primer plano — centrar
+    photoPosition: '50% 45%',
   },
   {
     id: 8,
@@ -114,6 +128,8 @@ const editorsData = [
     orcid: '0000-0002-5175-6049',
     email: 'lestrada@uniss.edu.cu',
     photoSlug: 'Lidia.jpeg',
+    // Selfie medio cuerpo — centrar en rostro
+    photoPosition: '50% 35%',
   },
   {
     id: 9,
@@ -125,6 +141,8 @@ const editorsData = [
     orcid: '0000-0001-5176-931X',
     email: 'lidia@uniss.edu.cu',
     photoSlug: 'lydia.jpg',
+    // Selfie close-up vertical — centrar
+    photoPosition: '50% 40%',
   },
   {
     id: 10,
@@ -136,6 +154,8 @@ const editorsData = [
     orcid: '0009-0000-1312-1694',
     email: 'natiaacosta26@gmail.com',
     photoSlug: 'Natia.jpeg',
+    // Medio cuerpo con fondo decorativo — centrar ligeramente arriba
+    photoPosition: '50% 25%',
   },
   {
     id: 11,
@@ -147,6 +167,9 @@ const editorsData = [
     orcid: '0000-0003-4033-2459',
     email: 'constancia.Shellon@up.ac.pa',
     photoSlug: 'constancia.jpg',
+    // Foto tipo carnet muy pequeña — contain para no recortar
+    photoFit: 'contain',
+    photoPosition: '50% 50%',
   },
   {
     id: 12,
@@ -158,6 +181,8 @@ const editorsData = [
     orcid: '0000-0002-4785-9344',
     email: 'jlazarog@unia.edu.pe',
     photoSlug: 'Lazaro.jpeg',
+    // Retrato formal busto — bien encuadrado
+    photoPosition: '50% 20%',
   },
   {
     id: 13,
@@ -169,6 +194,8 @@ const editorsData = [
     orcid: '0009-0008-5712-3630',
     email: 'publicaciones@relaticpanama.org',
     photoSlug: 'Anita.jpeg',
+    // Retrato horizontal medio cuerpo — centrar
+    photoPosition: '50% 25%',
   },
   {
     id: 14,
@@ -180,6 +207,9 @@ const editorsData = [
     orcid: '0000-0002-7311-3976',
     email: '@relaticpanama.org',
     photoSlug: 'Yamile.png',
+    // Foto tipo carnet muy pequeña — contain para mostrarla completa
+    photoFit: 'contain',
+    photoPosition: '50% 50%',
   },
   {
     id: 15,
@@ -191,6 +221,8 @@ const editorsData = [
     orcid: '0000-0002-7708-4594',
     email: 'coulette.andrews@up.ac.pa',
     photoSlug: 'Coulette.jpeg',
+    // Retrato profesional de busto — bien encuadrado
+    photoPosition: '50% 20%',
   },
 ];
 
@@ -303,7 +335,8 @@ const Hero = () => {
 
   return (
     <section
-      className="relative overflow-hidden flex flex-col min-h-[100dvh] lg:min-h-0 lg:h-[clamp(580px,72vh,820px)]"
+      id="comite-editorial"
+      className="relative overflow-hidden flex flex-col min-h-[85dvh] lg:min-h-0 lg:h-[clamp(500px,58vh,680px)]"
       aria-label="Comité Editorial Internacional"
       style={{
         background: '#0A2A43',
@@ -338,6 +371,38 @@ const Hero = () => {
         />
       </div>
 
+      {/* ═══ Encabezado introductorio ═══ */}
+      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pt-5 pb-3 lg:pt-4 lg:pb-2 flex items-center gap-4">
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="hidden sm:flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full" style={{ background: accentColors[0] }} />
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: accentColors[1], opacity: 0.7 }} />
+            <div className="w-1 h-1 rounded-full" style={{ background: accentColors[2], opacity: 0.5 }} />
+          </div>
+          <div className="h-px w-6 sm:w-10" style={{ background: 'rgba(255,255,255,0.15)' }} />
+        </div>
+        <div className="min-w-0">
+          <h2
+            className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] mb-0.5"
+            style={{ color: `${accent}CC` }}
+          >
+            Comité Editorial Internacional
+          </h2>
+          <p
+            className="text-[12px] sm:text-[13px] font-light tracking-wide truncate"
+            style={{ color: 'rgba(255,255,255,0.50)' }}
+          >
+            Conoce a nuestro equipo de revisores y editores expertos
+          </p>
+        </div>
+        <div className="hidden lg:block flex-1" />
+        <div className="hidden lg:flex items-center gap-2 flex-shrink-0 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          <span>{String(current + 1).padStart(2, '0')}</span>
+          <div className="w-4 h-px" style={{ background: 'rgba(255,255,255,0.15)' }} />
+          <span>{String(editorsData.length).padStart(2, '0')}</span>
+        </div>
+      </div>
+
       {/* ═══ Layout editorial — canvas split ═══ */}
       <div className="relative z-10 flex-1 flex flex-col lg:flex-row w-full">
 
@@ -346,7 +411,7 @@ const Hero = () => {
              Se extiende más allá de su columna
              con degradados orgánicos multicapa
              ────────────────────────────────── */}
-        <div className="relative lg:w-[42%] h-[35vh] min-h-[320px] lg:min-h-0 lg:h-full flex-shrink-0 overflow-visible">
+        <div className="relative lg:w-[42%] h-[28vh] min-h-[260px] lg:min-h-0 lg:h-full flex-shrink-0 overflow-visible">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={editor.id}
@@ -361,8 +426,11 @@ const Hero = () => {
                 <img
                   src={photoSrc}
                   alt={`Fotografía de ${editor.name}`}
-                  className="w-full h-full object-cover object-top"
-                  style={{ objectPosition: '50% 15%' }}
+                  className="w-full h-full"
+                  style={{
+                    objectFit: editor.photoFit || 'cover',
+                    objectPosition: editor.photoPosition || '50% 30%',
+                  }}
                   loading="lazy"
                 />
               ) : (
@@ -444,7 +512,7 @@ const Hero = () => {
              INFORMACIÓN — jerarquía tipográfica
              con respiración generosa entre bloques
              ────────────────────────────────── */}
-        <div className="relative flex-1 flex items-center px-6 sm:px-10 lg:pl-8 lg:pr-16 pt-8 pb-32 lg:py-0">
+        <div className="relative flex-1 flex items-center px-6 sm:px-10 lg:pl-8 lg:pr-16 pt-5 pb-24 lg:py-0">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={editor.id + '-info'}
@@ -459,23 +527,23 @@ const Hero = () => {
             >
               {/* ── Sección ── */}
               <motion.div custom={0} variants={staggerChild} initial="hidden" animate="visible"
-                className="flex items-center gap-3 mb-8"
+                className="flex items-center gap-3 mb-5"
               >
                 <div className="h-px w-8" style={{ background: `${accent}80` }} />
                 <span
-                  className="text-sm font-bold uppercase tracking-[0.15em]"
+                  className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.15em]"
                   style={{ color: `${accent}CC` }}
                 >
-                  Comité Editorial Internacional
+                  Perfil del editor
                 </span>
               </motion.div>
 
               {/* ── Rol ── */}
               <motion.div custom={1} variants={staggerChild} initial="hidden" animate="visible"
-                className="mb-6"
+                className="mb-4"
               >
                 <span
-                  className="inline-block px-3.5 py-1.5 text-sm font-bold uppercase tracking-[0.1em]"
+                  className="inline-block px-3 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-[0.1em]"
                   style={{
                     background: `${accent}15`,
                     color: accent,
@@ -487,20 +555,20 @@ const Hero = () => {
               </motion.div>
 
               {/* ── Nombre ── */}
-              <motion.h1 custom={2} variants={staggerChild} initial="hidden" animate="visible"
-                className="font-black leading-[1] mb-5"
+              <motion.h3 custom={2} variants={staggerChild} initial="hidden" animate="visible"
+                className="font-black leading-[1.05] mb-3"
                 style={{
                   color: '#FFFFFF',
-                  fontSize: 'clamp(1.6rem, 3.2vw, 2.6rem)',
+                  fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
                   letterSpacing: '-0.025em',
                 }}
               >
                 {editor.name}
-              </motion.h1>
+              </motion.h3>
 
               {/* ── Título académico ── */}
               <motion.p custom={3} variants={staggerChild} initial="hidden" animate="visible"
-                className="text-[14px] sm:text-[15px] font-medium tracking-wide mb-3"
+                className="text-[13px] sm:text-[14px] font-medium tracking-wide mb-2"
                 style={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}
               >
                 {editor.title}
@@ -508,38 +576,38 @@ const Hero = () => {
 
               {/* ── Afiliación ── */}
               <motion.div custom={4} variants={staggerChild} initial="hidden" animate="visible"
-                className="flex items-start gap-2.5 mb-7"
+                className="flex items-start gap-2 mb-5"
               >
                 <div
-                  className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-[6px]"
+                  className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-[5px]"
                   style={{ background: accent, boxShadow: `0 0 10px ${accent}80` }}
                 />
-                <p className="text-[14px] font-medium leading-relaxed" style={{ color: 'rgba(255,255,255,0.95)' }}>
+                <p className="text-[13px] font-medium leading-relaxed" style={{ color: 'rgba(255,255,255,0.95)' }}>
                   {editor.affiliation}
                 </p>
               </motion.div>
 
               {/* ── Biografía (estilo editorial destacado) ── */}
               <motion.div custom={5} variants={staggerChild} initial="hidden" animate="visible"
-                className="mb-8 relative pl-5 sm:pl-6"
+                className="mb-5 relative pl-4 sm:pl-5"
               >
                 {/* Acento visual izquierdo para enmarcar la bio */}
-                <div 
-                  className="absolute left-0 top-1 bottom-1 w-[3px] rounded-full" 
-                  style={{ background: `linear-gradient(to bottom, ${accent}dd, ${accent}30)` }} 
+                <div
+                  className="absolute left-0 top-1 bottom-1 w-[2px] rounded-full"
+                  style={{ background: `linear-gradient(to bottom, ${accent}dd, ${accent}30)` }}
                   aria-hidden="true"
                 />
-                <p 
-                  className="text-[15px] sm:text-[16px] leading-[1.75] font-light"
-                  style={{ color: 'rgba(255,255,255,0.85)' }}
+                <p
+                  className="text-[13px] sm:text-[14px] leading-[1.7] font-light line-clamp-4"
+                  style={{ color: 'rgba(255,255,255,0.80)' }}
                 >
                   {editor.bio}
                 </p>
               </motion.div>
 
-              {/* ── ORCID & Email ── */}
+              {/* ── ORCID & Email — z-40 para quedar por encima de flechas/dots ── */}
               <motion.div custom={6} variants={staggerChild} initial="hidden" animate="visible"
-                className="flex flex-wrap items-center gap-3"
+                className="relative z-40 flex flex-wrap items-center gap-3"
               >
                 <a
                   href={`https://orcid.org/${editor.orcid}`}
@@ -552,6 +620,8 @@ const Hero = () => {
                     clipPath: 'polygon(0 0, 100% 0, 97% 100%, 0% 100%)',
                   }}
                   aria-label={`Perfil ORCID de ${editor.name}`}
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   <svg width="14" height="14" viewBox="0 0 256 256" fill="none" aria-hidden="true">
                     <path d="M128 256C198.7 256 256 198.7 256 128C256 57.3 198.7 0 128 0C57.3 0 0 57.3 0 128C0 198.7 57.3 256 128 256Z" fill="#A6CE39" />
@@ -572,9 +642,11 @@ const Hero = () => {
                     clipPath: 'polygon(0 0, 100% 0, 97% 100%, 0% 100%)',
                   }}
                   aria-label={`Correo electrónico de ${editor.name}`}
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   <Mail size={14} style={{ color: accent }} />
-                  <span className="truncate max-w-[180px]">{editor.email}</span>
+                  <span className="break-all">{editor.email}</span>
                 </a>
               </motion.div>
             </motion.div>
@@ -642,15 +714,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Contador vertical */}
-      <div className="absolute top-1/2 -translate-y-1/2 right-5 z-20 hidden lg:flex flex-col items-center">
-        <span
-          className="text-[9px] font-bold uppercase tracking-[0.25em]"
-          style={{ color: 'rgba(255,255,255,0.2)', writingMode: 'vertical-lr' }}
-        >
-          {String(current + 1).padStart(2, '0')} — {String(editorsData.length).padStart(2, '0')}
-        </span>
-      </div>
+      {/* El contador ahora está integrado en el encabezado superior */}
     </section>
   );
 };

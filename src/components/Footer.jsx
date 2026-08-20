@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Share2, MessageCircle, ExternalLink, Play } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import logoValladolid from '../assets/logos/logo-valladolid.png';
 import logoItsva from '../assets/logos/logo-itsva.jpeg';
 import logoUnesca from '../assets/logos/logo-unesca.png';
@@ -40,39 +40,9 @@ const Footer = () => (
               <img src={logoSantander} alt="Logo Santander" className="h-10 sm:h-12 w-auto object-contain" />
             </div>
           </div>
-          <p className="text-sm leading-relaxed max-w-sm mb-5" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="text-sm leading-relaxed max-w-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
             El IV Congreso Internacional de la Red Latinoamericana de Investigaciones Cualitativas (RELATIC Panamá) reúne a académicos, investigadores y estudiantes de toda Latinoamérica.
           </p>
-          {/* Redes sociales */}
-          <div className="flex gap-3">
-            {[
-              { icon: Share2, href: '#', label: 'Facebook' },
-              { icon: MessageCircle, href: '#', label: 'Twitter' },
-              { icon: ExternalLink, href: '#', label: 'LinkedIn' },
-              { icon: Play, href: '#', label: 'YouTube' },
-            ].map(({ icon: Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
-                style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(244,168,0,0.15)';
-                  e.currentTarget.style.borderColor = 'rgba(244,168,0,0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                }}
-              >
-                <Icon size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
-              </a>
-            ))}
-          </div>
         </div>
 
         {/* Navegación rápida */}
@@ -90,12 +60,13 @@ const Footer = () => (
               { label: 'Ejes Temáticos', href: '#ejes' },
               { label: 'Costos', href: '#costos' },
               { label: 'Publicaciones', href: '#publicaciones' },
-              // TEMP: EventoNexus login deshabilitado — restaurar: 'https://eventonexus.com/login'
-              { label: 'Regístrate', href: '#registro' },
+              { label: 'Plantillas', href: '#plantillas' },
+              { label: 'Regístrate', href: 'https://eventonexus.com/login', external: true },
             ].map((l) => (
               <li key={l.label}>
                 <a
                   href={l.href}
+                  {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   className="text-sm leading-relaxed hover:text-white transition-colors duration-200 flex items-center gap-1.5"
                   style={{ color: 'rgba(255,255,255,0.55)' }}
                 >

@@ -1,15 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import logoValladolid from '../assets/logos/logo-valladolid.png';
 import logoItsva from '../assets/logos/logo-itsva.jpeg';
 import logoUnesca from '../assets/logos/logo-unesca.png';
 import logoSantander from '../assets/logos/logo-santander.png';
 
+const SECTION_IDS = ['cronograma', 'comite', 'ejes', 'costos', 'publicaciones', 'plantillas'];
+
+function getActiveSectionHref() {
+  const probeY = Math.max(120, Math.round(window.innerHeight * 0.28));
+  const scrollBottom = window.scrollY + window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight;
+
+  // Pie de página / final del documento → última sección del menú
+  if (scrollBottom >= docHeight - 120) {
+    return '#plantillas';
+  }
+
+  // Sección que contiene el punto de referencia (bajo el navbar)
+  for (let i = SECTION_IDS.length - 1; i >= 0; i -= 1) {
+    const id = SECTION_IDS[i];
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= probeY && rect.bottom > probeY) {
+      return `#${id}`;
+    }
+  }
+
+  // Fallback: última sección cuyo inicio ya pasó el probe
+  let fallback = '';
+  for (const id of SECTION_IDS) {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= probeY) {
+      fallback = `#${id}`;
+    }
+  }
+  return fallback;
+}
+
 // Navbar con drawer móvil que abre desde la DERECHA
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('');
+  const spyLockRef = useRef(null);
 
   const navLinks = [
     { label: 'Cronograma', href: '#cronograma' },
@@ -17,24 +52,28 @@ const Navbar = () => {
     { label: 'Ejes Temáticos', href: '#ejes' },
     { label: 'Costos', href: '#costos' },
     { label: 'Publicaciones', href: '#publicaciones' },
-    // TEMP: EventoNexus login deshabilitado — restaurar: 'https://eventonexus.com/login'
-    { label: 'Regístrate', href: '#registro', isHighlighted: true },
+    { label: 'Plantillas', href: '#plantillas' },
+    { label: 'Regístrate', href: 'https://eventonexus.com/login', isHighlighted: true, external: true },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      const sections = ['cronograma', 'comite', 'ejes', 'costos', 'publicaciones', 'registro'];
-      for (const id of [...sections].reverse()) {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 100) {
-          setActiveLink(`#${id}`);
-          break;
-        }
-      }
+
+      // Evita que el scroll suave al hacer clic revierta el ítem activo
+      if (spyLockRef.current) return;
+
+      const current = getActiveSectionHref();
+      if (current) setActiveLink(current);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -45,6 +84,15 @@ const Navbar = () => {
   const handleLinkClick = (href) => {
     setActiveLink(href);
     setDrawerOpen(false);
+
+    if (href.startsWith('#')) {
+      spyLockRef.current = href;
+      window.setTimeout(() => {
+        if (spyLockRef.current === href) spyLockRef.current = null;
+        const current = getActiveSectionHref();
+        if (current) setActiveLink(current);
+      }, 900);
+    }
   };
 
   return (
@@ -61,53 +109,54 @@ const Navbar = () => {
           boxShadow: isScrolled ? '0 1px 12px rgba(0,0,0,0.06)' : 'none',
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 flex items-center justify-between gap-3">
           {/* Logos — lado izquierdo */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a href="#" className="flex items-center gap-1.5 sm:gap-2 md:gap-3 group">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <a href="#" className="flex items-center gap-1.5 sm:gap-2 md:gap-2.5 xl:gap-3 group">
               <img
                 src={logoValladolid}
                 alt="Logo Valladolid"
-                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-10 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
               <img
                 src={logoItsva}
                 alt="Logo ITSVA"
-                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-10 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
               <img
                 src={logoUnesca}
                 alt="Logo Unesca"
-                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-10 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <div className="h-5 sm:h-6 md:h-8 w-px" style={{ background: '#E5E7EB' }} />
               <img
                 src={logoSantander}
                 alt="Logo Santander"
-                className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-6 sm:h-8 md:h-10 lg:h-10 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </a>
-            <div className="hidden md:block ml-1 lg:ml-2">
-              <p className="text-[11px] lg:text-xs leading-tight" style={{ color: '#4B5563' }}>IV Congreso</p>
-              <p className="text-xs lg:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>RELATIC 2026</p>
+            <div className="hidden xl:block ml-1 xl:ml-2">
+              <p className="text-[11px] xl:text-xs leading-tight" style={{ color: '#4B5563' }}>IV Congreso</p>
+              <p className="text-xs xl:text-sm font-bold leading-tight" style={{ color: '#0A2A43' }}>RELATIC 2026</p>
             </div>
           </div>
 
-          {/* Links desktop */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* Links desktop — una sola línea, espaciado compacto en lg y más aire en xl */}
+          <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 shrink-0">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => handleLinkClick(link.href)}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300"
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                className="whitespace-nowrap px-2.5 xl:px-3.5 py-2 rounded-lg text-[13px] xl:text-sm font-medium transition-all duration-300"
                 style={
                   link.isHighlighted
                     ? {
-                      marginLeft: '8px',
-                      padding: '10px 20px',
+                      marginLeft: '6px',
+                      padding: '9px 16px',
                       fontWeight: 700,
                       color: '#FFFFFF',
                       borderRadius: '9999px',
@@ -119,21 +168,27 @@ const Navbar = () => {
                       : { color: '#0A2A43' }
                 }
                 onMouseEnter={(e) => {
-                  if (!link.isHighlighted && activeLink !== link.href) {
-                    e.currentTarget.style.color = '#FF6200';
-                    e.currentTarget.style.background = 'rgba(255,98,0,0.06)';
-                  } else if (link.isHighlighted) {
+                  if (link.isHighlighted) {
                     e.currentTarget.style.background = '#0002E9';
                     e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,2,233,0.3)';
+                    return;
                   }
+                  // Hover también en el ítem activo (p. ej. Plantillas al final de la página)
+                  e.currentTarget.style.color = '#FF6200';
+                  e.currentTarget.style.background = 'rgba(255,98,0,0.12)';
                 }}
                 onMouseLeave={(e) => {
-                  if (!link.isHighlighted && activeLink !== link.href) {
-                    e.currentTarget.style.color = '#0A2A43';
-                    e.currentTarget.style.background = 'transparent';
-                  } else if (link.isHighlighted) {
+                  if (link.isHighlighted) {
                     e.currentTarget.style.background = '#FF6200';
                     e.currentTarget.style.boxShadow = '0 4px 14px rgba(255,98,0,0.3)';
+                    return;
+                  }
+                  if (activeLink === link.href) {
+                    e.currentTarget.style.color = '#FF6200';
+                    e.currentTarget.style.background = 'rgba(255,98,0,0.06)';
+                  } else {
+                    e.currentTarget.style.color = '#0A2A43';
+                    e.currentTarget.style.background = 'transparent';
                   }
                 }}
               >
@@ -208,6 +263,7 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               onClick={() => handleLinkClick(link.href)}
+              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className="flex items-center justify-between px-4 py-3.5 rounded-xl font-medium transition-all duration-200"
               style={
                 link.isHighlighted

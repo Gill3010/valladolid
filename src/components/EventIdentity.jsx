@@ -58,7 +58,7 @@ const EventIdentity = () => {
           </div>
 
           {/* ── Columna derecha: meta-datos + CTA ── */}
-          <div className="flex flex-col gap-5 w-full lg:w-auto lg:min-w-[340px]">
+          <div className="flex flex-col gap-5 w-full lg:w-auto lg:min-w-85">
             {/* Tarjetas meta */}
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
               {/* Fechas */}
@@ -105,7 +105,7 @@ const EventIdentity = () => {
                   style={{ background: '#FF6200' }}
                 >
                   <span
-                    className="text-[10px] font-bold uppercase tracking-[0.1em] mb-0.5"
+                    className="text-[10px] font-bold uppercase tracking-widest mb-0.5"
                     style={{ color: 'rgba(255,255,255,0.80)' }}
                   >
                     Modalidad
@@ -124,7 +124,7 @@ const EventIdentity = () => {
                   style={{ background: '#007AFF' }}
                 >
                   <span
-                    className="text-[10px] font-bold uppercase tracking-[0.1em] mb-0.5"
+                    className="text-[10px] font-bold uppercase tracking-widest mb-0.5"
                     style={{ color: 'rgba(255,255,255,0.80)' }}
                   >
                     Híbrida
@@ -167,14 +167,17 @@ const EventIdentity = () => {
 
             {/* CTA — coherente con el navbar */}
             <a
-              // TEMP: EventoNexus login deshabilitado — restaurar: https://eventonexus.com/login (+ target="_blank" rel="noopener noreferrer")
-              href="#registro"
+              href="https://eventonexus.com/login"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm sm:text-base font-bold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: '#FF6200',
                 color: '#FFFFFF',
                 boxShadow: '0 4px 14px rgba(255,98,0,0.25)',
               }}
+              onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               Regístrate ahora
               <ArrowRight size={16} aria-hidden="true" />

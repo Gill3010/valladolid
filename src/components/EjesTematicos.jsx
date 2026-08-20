@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import  { useState, useEffect, useRef } from 'react';
 import {
   Leaf,
   Cpu,
@@ -9,6 +9,8 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  MonitorSmartphone,
+  Lightbulb,
 } from 'lucide-react';
 
 // ── Importación de imágenes de ejes temáticos ──
@@ -18,6 +20,8 @@ import imgEje3 from '../assets/ejestematicos/eje3.png';
 import imgEje4 from '../assets/ejestematicos/eje4.png';
 import imgEje5 from '../assets/ejestematicos/eje5.png';
 import imgEje6 from '../assets/ejestematicos/eje6.png';
+import imgEje7 from '../assets/ejestematicos/eje7.png';
+import imgEje8 from '../assets/ejestematicos/eje8.png';
 
 const AUTOPLAY_MS = 5000;
 
@@ -33,6 +37,14 @@ const ejes = [
     border: 'rgba(34,197,94,0.2)',
     hoverBorder: '#22c55e',
     imagen: imgEje1,
+    subtemas: [
+      'Innovación educativa',
+      'Prácticas pedagógicas',
+      'Equidad y acceso',
+      'Políticas públicas en educación',
+      'Ciencias sociales y humanidades',
+      'Investigación para la sostenibilidad',
+    ],
   },
   {
     icon: Cpu,
@@ -44,6 +56,14 @@ const ejes = [
     border: 'rgba(0,122,255,0.2)',
     hoverBorder: '#007AFF',
     imagen: imgEje2,
+    subtemas: [
+      'Gestión estratégica',
+      'Economía circular',
+      'Emprendimiento social',
+      'Tecnologías emergentes',
+      'Ciencias económicas',
+      'Administración sostenible',
+    ],
   },
   {
     icon: Landmark,
@@ -55,6 +75,14 @@ const ejes = [
     border: 'rgba(244,168,0,0.2)',
     hoverBorder: '#F4A800',
     imagen: imgEje3,
+    subtemas: [
+      'Patrimonio cultural maya',
+      'Patrimonio latinoamericano',
+      'Arte e identidad',
+      'Digitalización del patrimonio',
+      'Investigación interdisciplinaria',
+      'Turismo cultural sostenible',
+    ],
   },
   {
     icon: GraduationCap,
@@ -66,6 +94,14 @@ const ejes = [
     border: 'rgba(44,0,85,0.15)',
     hoverBorder: '#2C0055',
     imagen: imgEje4,
+    subtemas: [
+      'Innovación pedagógica',
+      'Educación a distancia',
+      'Competencias del siglo XXI',
+      'Modelos centrados en el estudiante',
+      'Evaluación del aprendizaje',
+      'Internacionalización universitaria',
+    ],
   },
   {
     icon: BarChart3,
@@ -77,6 +113,14 @@ const ejes = [
     border: 'rgba(255,98,0,0.2)',
     hoverBorder: '#FF6200',
     imagen: imgEje5,
+    subtemas: [
+      'Big Data',
+      'Machine Learning',
+      'Analítica avanzada',
+      'Visualización de datos',
+      'Minería de datos',
+      'Aplicaciones científicas y sociales',
+    ],
   },
   {
     icon: MapPin,
@@ -88,6 +132,53 @@ const ejes = [
     border: 'rgba(0,2,233,0.15)',
     hoverBorder: '#0002E9',
     imagen: imgEje6,
+    subtemas: [
+      'Políticas públicas',
+      'Emprendimiento local',
+      'Economía social',
+      'Cohesión territorial',
+      'Desarrollo comunitario',
+      'Ordenamiento territorial',
+    ],
+  },
+  {
+    icon: MonitorSmartphone,
+    title: 'Sistemas Computacionales',
+    description:
+      'Exploración de las ciencias de la computación y las tecnologías digitales aplicadas a contextos educativos, industriales y de comunicación, incluyendo inteligencia artificial, redes y sistemas inteligentes.',
+    color: '#9B59B6',
+    bg: 'rgba(155,89,182,0.07)',
+    border: 'rgba(155,89,182,0.2)',
+    hoverBorder: '#9B59B6',
+    imagen: imgEje7,
+    subtemas: [
+      'Ciencias de la computación',
+      'Ciencias y tecnología de alimentos y productos naturales',
+      'Ingeniería de Software',
+      'Desarrollo de Software',
+      'Tecnologías aplicadas a la educación',
+      'Tecnologías de la información y Comunicación',
+      'Redes',
+      'Inteligencia Artificial',
+      'Internet de las Cosas y/o Domótica',
+    ],
+  },
+  {
+    icon: Lightbulb,
+    title: 'Innovación',
+    description:
+      'Generación y aplicación de nuevas ideas en productos, servicios y procesos que impulsen el desarrollo tecnológico sustentable, con impacto real en organizaciones y comunidades.',
+    color: '#E05E00',
+    bg: 'rgba(224,94,0,0.07)',
+    border: 'rgba(224,94,0,0.2)',
+    hoverBorder: '#E05E00',
+    imagen: imgEje8,
+    subtemas: [
+      'Productos',
+      'Servicios',
+      'Procesos',
+      'Innovación y desarrollo tecnológico sustentable',
+    ],
   },
 ];
 
@@ -130,13 +221,25 @@ const EjeCard = ({ eje, index }) => {
               boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}
           >
-            <img
-              src={eje.imagen}
-              alt={eje.title}
-              className="w-full h-full object-contain p-1"
-              loading="lazy"
-              draggable={false}
-            />
+            {eje.imagen ? (
+              <img
+                src={eje.imagen}
+                alt={eje.title}
+                className="w-full h-full object-contain p-1"
+                loading="lazy"
+                draggable={false}
+              />
+            ) : (
+              /* Placeholder mientras la imagen no esté disponible */
+              <div
+                className="w-full h-full flex flex-col items-center justify-center gap-2"
+                style={{ background: eje.bg }}
+                aria-label={`Imagen pendiente para ${eje.title}`}
+              >
+                <Icon size={36} style={{ color: eje.color, opacity: 0.4 }} aria-hidden="true" />
+                <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: eje.color, opacity: 0.5 }}>Imagen próximamente</span>
+              </div>
+            )}
           </div>
           <figcaption className="sr-only">{eje.title}</figcaption>
         </figure>
@@ -177,21 +280,46 @@ const EjeCard = ({ eje, index }) => {
 
         {/* Descripción — mayor tamaño y mejor contraste */}
         <p
-          className="text-sm sm:text-base leading-relaxed flex-1"
-          style={{ color: '#374151' }}
+          className="text-sm sm:text-base leading-relaxed text-justify"
+          style={{ color: '#374151', hyphens: 'auto', wordBreak: 'break-word' }}
         >
           {eje.description}
         </p>
 
-        {/* CTA en hover — más prominente */}
-        <div
-          className="flex items-center gap-2 text-sm font-semibold mt-auto opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-          style={{ color: eje.color }}
+        {/* Subtemas — solo se muestran si el eje los define */}
+        {eje.subtemas && eje.subtemas.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {eje.subtemas.map((subtema) => (
+              <span
+                key={subtema}
+                className="text-[11px] font-semibold px-2.5 py-1 rounded-full leading-none"
+                style={{
+                  background: eje.bg,
+                  color: eje.color,
+                  border: `1px solid ${eje.border}`,
+                }}
+              >
+                {subtema}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* CTA — siempre visible (hover lo enfatiza en desktop) */}
+        <a
+          href="https://eventonexus.com/login"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-sm font-semibold mt-auto transition-all duration-300 opacity-100 translate-y-0 sm:opacity-80 sm:group-hover:opacity-100"
+          style={{ color: eje.color, textDecoration: 'none', cursor: 'pointer' }}
+          aria-label={`Enviar ponencia al eje: ${eje.title}`}
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
         >
           <span>Enviar ponencia</span>
           <ArrowRight size={14} />
           <div className="h-px flex-1" style={{ background: `${eje.color}40` }} />
-        </div>
+        </a>
       </div>
     </div>
   );
@@ -241,6 +369,16 @@ const EjesCarousel = ({ items }) => {
   const dragDelta = useRef(0);
   const resumeTimer = useRef(null);
   const wrapping = useRef(false);
+  const [layoutVisibleCount, setLayoutVisibleCount] = useState(visibleCount);
+  const [animateRestoreToken, setAnimateRestoreToken] = useState(0);
+
+  // Si cambia el nº visible, ajusta el índice en render (evita setState en effect)
+  if (layoutVisibleCount !== visibleCount) {
+    setLayoutVisibleCount(visibleCount);
+    setAnimate(false);
+    setIndex((i) => i % total);
+    setAnimateRestoreToken((t) => t + 1);
+  }
 
   // Clones al final para el loop infinito (mismo gap / ancho que el original)
   const slides = [...items, ...items.slice(0, visibleCount)];
@@ -256,13 +394,12 @@ const EjesCarousel = ({ items }) => {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // Si cambia el nº visible, mantén el índice dentro del rango real
+  // Reactiva la transición tras un cambio de layout (solo en callback, no sync)
   useEffect(() => {
-    setAnimate(false);
-    setIndex((i) => i % total);
+    if (animateRestoreToken === 0) return undefined;
     const id = requestAnimationFrame(() => setAnimate(true));
     return () => cancelAnimationFrame(id);
-  }, [visibleCount, total]);
+  }, [animateRestoreToken]);
 
   const pauseTemporarily = () => {
     setPaused(true);
@@ -272,12 +409,20 @@ const EjesCarousel = ({ items }) => {
 
   const next = () => {
     if (wrapping.current) return;
+    if (reduceMotion) {
+      setIndex((i) => (i + 1) % total);
+      return;
+    }
     setAnimate(true);
     setIndex((i) => (i >= total ? i : i + 1));
   };
 
   const prev = () => {
     if (wrapping.current) return;
+    if (reduceMotion) {
+      setIndex((i) => (i - 1 + total) % total);
+      return;
+    }
     if (index === 0) {
       wrapping.current = true;
       setAnimate(false);
@@ -319,19 +464,14 @@ const EjesCarousel = ({ items }) => {
     snapLoop();
   };
 
-  // Sin transición (reduced motion), el loop debe saltar al instante
   useEffect(() => {
-    if (!reduceMotion) return undefined;
-    if (index < total) return undefined;
-    snapLoop();
-    return undefined;
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo reacciona al índice fuera de rango
-  }, [index, total, reduceMotion]);
-
-  useEffect(() => {
-    if (paused || reduceMotion) return undefined;
+    if (paused) return undefined;
     const id = setInterval(() => {
       if (wrapping.current) return;
+      if (reduceMotion) {
+        setIndex((i) => (i + 1) % total);
+        return;
+      }
       setAnimate(true);
       setIndex((i) => (i >= total ? i : i + 1));
     }, AUTOPLAY_MS);
@@ -345,8 +485,15 @@ const EjesCarousel = ({ items }) => {
     []
   );
 
+  const isInteractiveTarget = (target) => {
+    const el = target?.nodeType === 3 ? target.parentElement : target;
+    return Boolean(el?.closest?.('a, button, select, input, label, [role="link"]'));
+  };
+
   const onPointerDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    // No capturar el pointer sobre el CTA: si no, el clic no abre EventoNexus
+    if (isInteractiveTarget(e.target)) return;
     pointerStartX.current = e.clientX;
     dragDelta.current = 0;
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -511,7 +658,7 @@ const EjesTematicos = () => (
   >
     {/* Decoración sutil central */}
     <div
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.025] blur-3xl pointer-events-none"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full opacity-[0.025] blur-3xl pointer-events-none"
       style={{ background: 'radial-gradient(circle, #007AFF, #0002E9)' }}
     />
 
@@ -559,13 +706,16 @@ const EjesTematicos = () => (
           ¿Tu investigación no encaja en estos ejes? Contáctanos para más información.
         </p>
         <a
-          // TEMP: EventoNexus login deshabilitado — restaurar: https://eventonexus.com/login
-          href="#registro"
+          href="https://eventonexus.com/login"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105"
           style={{
             background: '#FF6200',
             boxShadow: '0 6px 24px rgba(255,98,0,0.3)',
           }}
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = '#0002E9';
             e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,2,233,0.3)';

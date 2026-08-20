@@ -11,6 +11,7 @@ import Comite from './components/Comite';
 import EjesTematicos from './components/EjesTematicos';
 import Costos from './components/Costos';
 import Publicaciones from './components/Publicaciones';
+import Plantillas from './components/Plantillas';
 import Footer from './components/Footer';
 
 
@@ -52,6 +53,9 @@ function App() {
 
         {/* Portales de publicación de productos científicos */}
         <Publicaciones />
+
+        {/* Plantillas oficiales para envíos */}
+        <Plantillas />
       </main>
 
       {/* Pie de página */}
